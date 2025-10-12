@@ -61,29 +61,24 @@ function MetricsDashboard() {
 
   const loadMetrics = async () => {
     try {
-      // In a real deployment, we'd need to fetch the metrics files
-      // For now, we'll create sample data based on Instance 0
-      const sampleMetrics: Metrics[] = [
-        {
-          iteration: 0,
-          instance: 'Instance 0 (Foundation)',
-          date: '2025-10-12',
-          loc: { total: 890, src: 0, scripts: 300, tests: 0 },
-          files: { total: 6, typescript: 1, javascript: 0, markdown: 5 },
-          typescript_errors: 0,
-          build_success: false,
-          git: {
-            commits: 3,
-            files_changed_this_iteration: 6,
-            lines_added_this_iteration: 890,
-            lines_deleted_this_iteration: 0
-          }
-        }
-      ]
+      // Use Vite's import.meta.glob to load all metrics files
+      const metricsModules = import.meta.glob('../../metrics/*.json')
 
-      setMetrics(sampleMetrics)
+      const loadedMetrics: Metrics[] = []
+
+      // Load each metrics file
+      for (const path in metricsModules) {
+        const module = await metricsModules[path]() as { default: Metrics }
+        loadedMetrics.push(module.default)
+      }
+
+      // Sort by iteration number
+      loadedMetrics.sort((a, b) => a.iteration - b.iteration)
+
+      setMetrics(loadedMetrics)
       setLoading(false)
     } catch (err) {
+      console.error('Error loading metrics:', err)
       setError('Failed to load metrics')
       setLoading(false)
     }

@@ -67,7 +67,8 @@ interface Metrics {
 function countLOC(dir: string, extensions: string[]): number {
   try {
     const find = extensions.map(ext => `-name "*.${ext}"`).join(' -o ');
-    const cmd = `find ${dir} \\( ${find} \\) -exec wc -l {} + | tail -1 | awk '{print $1}'`;
+    // Exclude node_modules, dist, and .git directories
+    const cmd = `find ${dir} \\( ${find} \\) ! -path "*/node_modules/*" ! -path "*/dist/*" ! -path "*/.git/*" -exec wc -l {} + | tail -1 | awk '{print $1}'`;
     const result = execSync(cmd, { encoding: 'utf-8' }).trim();
     return parseInt(result) || 0;
   } catch (error) {
@@ -80,7 +81,8 @@ function countLOC(dir: string, extensions: string[]): number {
  */
 function countFiles(dir: string, extension: string): number {
   try {
-    const cmd = `find ${dir} -name "*.${extension}" | wc -l`;
+    // Exclude node_modules, dist, and .git directories
+    const cmd = `find ${dir} -name "*.${extension}" ! -path "*/node_modules/*" ! -path "*/dist/*" ! -path "*/.git/*" | wc -l`;
     const result = execSync(cmd, { encoding: 'utf-8' }).trim();
     return parseInt(result) || 0;
   } catch (error) {
