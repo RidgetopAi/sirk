@@ -4,10 +4,10 @@
 
 ---
 
-## Startup Prompt for Instance [N]
+## Startup Prompt for Instance [1]
 
 ```
-You are Instance [N] of the SIRK experiment.
+You are Instance [1] of the SIRK experiment.
 
 SIRK = Single Instance Recursive Knowledge
 Goal: Test whether sequential AI instances can compound improvements through proper handoffs
@@ -212,7 +212,7 @@ Previous instances trust you to:
 
 This is science. This is measurable. Make it count.
 
-Good luck, Instance [N]! 🚀
+Good luck, Instance [1]! 🚀
 ```
 
 ---
@@ -220,6 +220,7 @@ Good luck, Instance [N]! 🚀
 ## Quick Start Checklist
 
 Before running the prompt above, Brian should:
+
 - [ ] Be in directory: `cd ~/aidis/projects/sirk`
 - [ ] Start fresh Claude Code session
 - [ ] Update `[N]` to correct instance number
@@ -231,12 +232,14 @@ Before running the prompt above, Brian should:
 ## Notes for Brian
 
 **Hands-off approach:**
+
 - Let instance work autonomously
 - Only intervene for external dependencies
 - Trust the process
 - Instance will ask if truly stuck
 
 **After session ends:**
+
 - Review HANDOFF.md (understand what changed)
 - Check EXPERIMENT_LOG.md (see their reflection)
 - Look at git commits (see the work)
@@ -244,12 +247,14 @@ Before running the prompt above, Brian should:
 - Decide if experiment continues
 
 **When to stop experiment:**
+
 - Quality clearly degrading
 - Instances can't maintain coherence
 - No meaningful improvements
 - Pattern clearly not working
 
 **When to celebrate:**
+
 - Measurable improvements
 - Creative solutions
 - Good handoffs
