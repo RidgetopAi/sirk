@@ -10,11 +10,13 @@
 
 ### What Exists
 - ✅ Repository structure created
-- ✅ AIDIS project `sirk-lab` configured
-- ✅ Git repository initialized
+- ✅ AIDIS project `sirk-lab` configured (PRIMARY handoff mechanism)
+- ✅ Git repository initialized with GitHub remote
 - ✅ Documentation framework in place
 - ✅ Metrics collection scaffolding
 - ✅ Reusable iteration prompt created
+- ✅ GitHub repo: https://github.com/ridgetop/sirk.git
+- ✅ Netlify auto-deploy configured (will deploy on push)
 
 ### What Works
 - Directory structure: `src/`, `scripts/`, `metrics/`, `docs/`
@@ -27,8 +29,10 @@
 - [ ] Set up build system (Vite/Next/Astro)
 - [ ] Implement metrics collection script
 - [ ] Create initial data visualization
-- [ ] Configure Netlify deployment
+- [ ] Push to GitHub (triggers Netlify auto-deploy)
 - [ ] Write tests
+
+**CRITICAL:** Use AIDIS heavily! Store all decisions, learnings, and handoff info in sirk-lab project.
 
 ---
 
@@ -77,8 +81,9 @@ Create ONE simple chart that displays:
 None yet (clean slate)
 
 ## Blockers Needing Brian
-- **Netlify credentials** (when ready to deploy)
-- No other blockers currently
+- None! Netlify auto-deploys from GitHub on push
+- Brian has GitHub access configured
+- No credentials needed from instances
 
 ---
 
@@ -96,11 +101,21 @@ None yet (clean slate)
 **Rationale:** Keep experiment design separate from instance contexts
 **Status:** Implemented
 
-### AD-002: Handoff Protocol
+### AD-002: Dual Handoff Protocol (AIDIS + Markdown)
 **Date:** 2025-10-12
-**Decided:** HANDOFF.md is single source of truth for next instance
-**Rationale:** Forces discipline, ensures continuity
+**Decided:** AIDIS sirk-lab is PRIMARY handoff mechanism, HANDOFF.md is human-readable summary
+**Rationale:**
+- AIDIS enables semantic search across iterations
+- Pattern discovery through context_search
+- Rich tagging for behavioral analysis
+- HANDOFF.md provides quick human scanning
 **Status:** Implemented
+
+### AD-003: GitHub + Netlify Deployment
+**Date:** 2025-10-12
+**Decided:** Push to GitHub (https://github.com/ridgetop/sirk.git), Netlify auto-deploys
+**Rationale:** Standard CI/CD, automatic deployment, version control, public visibility
+**Status:** Implemented (GitHub remote configured, Netlify pending Instance 1)
 
 ---
 
@@ -139,11 +154,21 @@ None yet (clean slate)
 - Code committed and pushed
 - Ready for Instance 2 to build on
 
-**Remember:**
-- Document your decisions (add to Architecture Decisions)
-- Update this file before ending session
-- Store rationale in AIDIS context
-- Think about next instance reading your work
+**Remember - AIDIS-First Workflow:**
+1. **AIDIS is PRIMARY:** Store ALL decisions, learnings, attempts in sirk-lab
+   - Use context_store with rich tags
+   - Store: planning, decisions, completion, error, discussion, handoff
+   - Tag: instance_N, feature_name, tech_choice, etc.
+2. **HANDOFF.md is SUMMARY:** Update this with high-level overview
+3. **GitHub is SOURCE:** Push code frequently (triggers Netlify deploy)
+4. **Think about search:** Future instances will use context_search to find your wisdom
+
+**Why AIDIS-first?**
+- Semantic search reveals patterns across iterations
+- Rich tagging enables behavioral analysis
+- Can discover "what instances tried that failed"
+- Can find "how instances solved X problem"
+- Makes experiment scientifically analyzable
 
 ---
 

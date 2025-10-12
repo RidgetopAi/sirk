@@ -23,18 +23,23 @@ STARTUP SEQUENCE:
 1. Switch to AIDIS project sirk-lab:
    mcp__aidis__project_switch sirk-lab
 
-2. Read recent contexts (last 10):
-   mcp__aidis__context_get_recent (limit: 10)
+2. Read recent contexts (last 10-20):
+   mcp__aidis__context_get_recent (limit: 20)
 
-3. Read HANDOFF.md (MOST IMPORTANT):
+3. Search AIDIS for relevant patterns:
+   mcp__aidis__context_search(query: "decisions made by previous instances")
+   mcp__aidis__context_search(query: "what worked well")
+   mcp__aidis__context_search(query: "failed attempts")
+
+4. Read HANDOFF.md (Human-readable summary):
    ~/aidis/projects/sirk/HANDOFF.md
-   This tells you current state and what to do next
+   This is a summary - AIDIS contexts are more detailed!
 
-4. Read EXPERIMENT_LOG.md:
+5. Read EXPERIMENT_LOG.md:
    ~/aidis/projects/sirk/EXPERIMENT_LOG.md
-   This shows what previous instances accomplished
+   Shows chronological history
 
-5. Review the codebase:
+6. Review the codebase:
    Check src/, scripts/, docs/ for current implementation
 
 YOUR SESSION PHASES:
@@ -48,25 +53,39 @@ Phase 1: UNDERSTAND (0-15 min)
 Phase 2: PLAN (15-20 min)
 - Choose 1-3 improvements or features for this session
 - Consider: Measurable? Valuable? Maintainable?
-- Store your plan in AIDIS context:
+- Search AIDIS for similar past decisions:
+  mcp__aidis__context_search(query: "[topic you're planning]")
+- Store your plan in AIDIS (REQUIRED):
   mcp__aidis__context_store(
-    content: "Instance [N] plan: [your plan]",
+    content: "Instance [N] Session Plan\n\nGoals:\n1. [goal 1]\n2. [goal 2]\n\nRationale: [why these goals]\nApproach: [how you'll do it]\nExpected outcomes: [what success looks like]",
     type: "planning",
-    tags: ["instance_[N]", "session_plan", "2025-10-12"]
+    tags: ["instance_[N]", "session_plan", "iteration_[N]", "[feature_name]", "2025-10-12"]
   )
 
 Phase 3: BUILD (20-65 min)
 - Implement your planned improvements
 - Write tests for new functionality
 - Keep TypeScript compilation clean
-- Document architectural decisions
+- Document architectural decisions in AIDIS:
+  mcp__aidis__context_store(
+    content: "[Decision description, alternatives considered, why chosen]",
+    type: "decision",
+    tags: ["instance_[N]", "architecture", "[specific_decision]", "2025-10-12"]
+  )
 
 WHEN STUCK:
+- Search AIDIS for how past instances solved similar problems:
+  mcp__aidis__context_search(query: "[your problem]")
 - Try 2-3 different approaches
-- If blocked by external dependency (credentials, services) → Ask Brian
+- If blocked by external dependency → Ask Brian (but Netlify auto-deploys, no credentials needed!)
 - If technical problem but solvable → Keep trying, get creative
 - At 60 min mark if still stuck → Pivot to simpler task
-- Document failed attempts in docs/attempts/ (learning!)
+- **DOCUMENT FAILED ATTEMPTS IN AIDIS** (critical learning!):
+  mcp__aidis__context_store(
+    content: "Failed Attempt: [what I tried]\nWhy it failed: [root cause]\nWhat I learned: [insight]",
+    type: "error",
+    tags: ["instance_[N]", "failed_attempt", "[topic]", "learning", "2025-10-12"]
+  )
 
 Phase 4: MEASURE (65-75 min)
 - Run metrics collection: scripts/collect-metrics.ts (or your implementation)
@@ -74,42 +93,78 @@ Phase 4: MEASURE (65-75 min)
 - Run tests: npm test (if tests exist)
 - Check deployment works (if applicable)
 
-Phase 5: HANDOFF (75-90 min) - CRITICAL!
-This is the most important phase - next instance depends on you!
+Phase 5: HANDOFF (75-90 min) - MOST CRITICAL PHASE!
+Next instance's success depends entirely on how well you hand off!
 
-1. Update HANDOFF.md:
-   - What you accomplished
-   - What you tried that didn't work
-   - What next instance should do
-   - Current blockers (if any)
-   - Update metrics section
-
-2. Update EXPERIMENT_LOG.md:
-   - Add your instance entry
-   - Document key decisions
-   - Record metrics
-   - Share reflections
-
-3. Store final context in AIDIS:
+1. **PRIMARY: Store comprehensive AIDIS handoff context** (DO THIS FIRST!):
    mcp__aidis__context_store(
-     content: "Instance [N] completion: [what you did, what worked, what's next]",
+     content: "Instance [N] Handoff - [Brief Title]
+
+     ## What I Accomplished
+     - [Achievement 1 with specifics]
+     - [Achievement 2 with specifics]
+
+     ## Key Decisions Made
+     - [Decision 1]: [Rationale]
+     - [Decision 2]: [Rationale]
+
+     ## What I Tried That Didn't Work
+     - [Failed approach 1]: [Why it failed, what I learned]
+     - [Failed approach 2]: [Why it failed, what I learned]
+
+     ## Current State
+     - Files modified: [list]
+     - Tests: [passing/total]
+     - Build: [status]
+     - Deployed: [URL or status]
+
+     ## What Next Instance Should Do
+     1. [Specific next step with context]
+     2. [Another next step]
+     3. [Optional improvement]
+
+     ## Known Issues/Blockers
+     - [Issue 1 if any]
+
+     ## Advice for Next Instance
+     - [Hard-won wisdom]
+     - [Things to watch out for]
+     ",
      type: "handoff",
-     tags: ["instance_[N]", "completion", "2025-10-12"]
+     tags: ["instance_[N]", "completion", "iteration_[N]", "handoff", "[key_features]", "2025-10-12"]
    )
 
-4. Git commit with clear message:
+2. Update HANDOFF.md (summary):
+   - Brief overview of accomplishments
+   - Update "Next Instance Should" section
+   - Update metrics section
+
+3. Update EXPERIMENT_LOG.md:
+   - Add your instance entry
+   - Key metrics and reflections
+
+4. Git commit and push to GitHub (triggers Netlify auto-deploy):
    git add .
-   git commit -m "Instance [N]: [brief description of your contribution]"
+   git commit -m "Instance [N]: [brief description of your contribution]
+
+   - [Accomplishment 1]
+   - [Accomplishment 2]
+   - [Key decision made]
+
+   Handoff: [Status for next instance]"
+   git push origin main
 
 RULES & PRINCIPLES:
 
 ✅ DO:
-- Read HANDOFF.md first (it's your mission brief)
+- **Use AIDIS heavily throughout session** (planning, decisions, errors, handoff)
+- Search AIDIS contexts when making decisions (learn from past instances)
+- Read HANDOFF.md for quick orientation
 - Build on what exists (don't rewrite unless necessary)
-- Document your reasoning
-- Update HANDOFF.md before ending session
-- Store contexts in AIDIS sirk-lab project
-- Think about next instance reading your work
+- Document reasoning in AIDIS with rich tags
+- Update HANDOFF.md before ending (summary only)
+- Push to GitHub (triggers auto-deploy to Netlify)
+- Think about next instance searching AIDIS for your wisdom
 - Persist through technical challenges
 
 ❌ DON'T:
@@ -121,12 +176,13 @@ RULES & PRINCIPLES:
 - Rush - quality over speed
 
 BRIAN'S ROLE (When to ask):
-- Netlify deployment credentials
-- External service API keys
-- Subjective quality scoring (end of iteration)
-- True blockers (external systems down, etc.)
+- ~~Netlify deployment credentials~~ (NOT NEEDED - auto-deploys from GitHub!)
+- External service API keys (if using 3rd party APIs)
+- Subjective quality scoring (optional - end of iteration)
+- True blockers (external systems down, GitHub access issues, etc.)
 
 For technical challenges: Keep trying, you've got this!
+For past solutions: Search AIDIS contexts!
 
 METRICS THAT MATTER:
 - Code quality: LOC, complexity, TypeScript errors
@@ -137,10 +193,11 @@ METRICS THAT MATTER:
 
 YOUR SUCCESS CRITERIA:
 - Something measurably better than before
-- Next instance can understand your work
-- HANDOFF.md clearly updated
-- Commits pushed with good messages
-- AIDIS contexts stored for learning
+- Next instance can understand your work via AIDIS handoff
+- HANDOFF.md updated (summary)
+- Code pushed to GitHub (triggers Netlify deploy)
+- **Rich AIDIS contexts stored** (planning, decisions, errors, handoff)
+- Future instances can search AIDIS and find your solutions/wisdom
 
 REMEMBER:
 You're not just building software - you're testing whether discontinuous collaboration can create compounding value. Your work validates or falsifies the hypothesis.

@@ -41,17 +41,37 @@ sirk/
 ## For Instances
 
 **You are Instance [N].** Your job:
-1. Read `HANDOFF.md` to understand current state
-2. Read `EXPERIMENT_LOG.md` to see what predecessors did
-3. Plan your contribution (60-90 min session)
-4. Build it, test it, measure it
-5. Update `HANDOFF.md` for next instance
-6. Log your work in `EXPERIMENT_LOG.md`
+1. **Switch to AIDIS project `sirk-lab`** (primary knowledge store)
+2. **Search AIDIS contexts** from previous instances (semantic search)
+3. Read `HANDOFF.md` for human-readable summary
+4. Read `EXPERIMENT_LOG.md` for chronological history
+5. **Plan your contribution** (60-90 min session) → **Store plan in AIDIS**
+6. **Build it, test it, measure it** → **Document decisions in AIDIS**
+7. **Store comprehensive handoff in AIDIS** (most critical!)
+8. Update `HANDOFF.md` and `EXPERIMENT_LOG.md` (summaries)
+9. **Push to GitHub** (triggers Netlify auto-deploy)
+
+**Handoff Strategy - AIDIS First:**
+- **AIDIS sirk-lab = PRIMARY:** All decisions, learnings, handoffs, failed attempts
+- **HANDOFF.md = SUMMARY:** Quick human-readable overview
+- **EXPERIMENT_LOG.md = CHRONICLE:** Chronological instance history
+- **GitHub = SOURCE:** Code repository + triggers deployment
+
+**Why AIDIS-first?**
+- Semantic search reveals patterns across iterations
+- Future instances search: "how did past instances solve X?"
+- Rich tagging enables behavioral analysis
+- Makes experiment scientifically analyzable
 
 **Key Files:**
-- `sirk-iteration-prompt.md` - Standard startup instructions
-- `HANDOFF.md` - Most important file (read first!)
+- `sirk-iteration-prompt.md` - Standard startup instructions (use this!)
+- `HANDOFF.md` - Human-readable summary
 - `scripts/collect-metrics.ts` - Run after every change
+
+**Deployment:**
+- **GitHub:** https://github.com/ridgetop/sirk.git
+- **Netlify:** Auto-deploys on push to main branch
+- **No credentials needed:** Just push to GitHub!
 
 ## Objective Metrics
 
@@ -70,10 +90,17 @@ We track:
 4. Let instance work autonomously
 
 **When instance needs you:**
-- Netlify deployment credentials
-- External service access
-- Subjective quality scoring (end of iteration)
-- True blockers (rare)
+- ~~Netlify deployment credentials~~ (NOT NEEDED - auto-deploys from GitHub)
+- External service API keys (if using 3rd party services)
+- Subjective quality scoring (optional - end of iteration)
+- True blockers (GitHub access issues, external systems down, etc.)
+
+**After each instance:**
+- Review HANDOFF.md (what changed?)
+- Check AIDIS sirk-lab contexts (read their handoff)
+- Look at GitHub commits (see the code)
+- Visit deployed site (verify it works)
+- Optionally score quality (1-10)
 
 **Experiment Status:** Iteration 0 (Foundation Setup) - October 12, 2025
 
