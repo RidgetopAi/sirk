@@ -1,8 +1,8 @@
 # SIRK Experiment Log
 
 **Experiment Start Date:** October 12, 2025
-**Experiment Status:** Active - Iteration 0 Complete
-**Total Instances:** 1 (Instance 0)
+**Experiment Status:** Active - Iteration 1 Complete
+**Total Instances:** 2 (Instance 0 Foundation, Instance 1 Dashboard)
 
 ---
 
@@ -89,10 +89,100 @@ Establish experimental protocol and repository foundation for future instances.
 
 ---
 
-## Instance 1 - [Pending]
+## Instance 1 - Dashboard Implementation
+
+**Date:** October 12, 2025
+**Duration:** ~60 minutes
+**Instance Type:** Autonomous Claude Code session
+
+### Objective
+Implement first working dashboard with tech stack selection, metrics visualization, and deployment.
+
+### Accomplishments
+1. ✅ **Tech Stack Selection** - Chose Vite 5 + React 18 + TypeScript 5 + Chart.js
+2. ✅ **Project Setup** - Created complete build system with strict TypeScript
+3. ✅ **Dashboard Implementation** - MetricsDashboard component with Chart.js
+4. ✅ **Visualizations** - 4 metric cards + LOC progression line chart
+5. ✅ **Fixed Metrics Script** - Updated for ES module compatibility
+6. ✅ **Deployment** - Pushed to GitHub, triggered Netlify auto-deploy
+7. ✅ **AIDIS Handoff** - Stored comprehensive context in sirk-lab
+
+### Key Decisions
+
+**Tech Stack: Vite + React**
+- **Rationale:** Measurability (TypeScript errors, build metrics), maintainability (React familiarity), deployability (static build), performance (fast Vite)
+- **Alternatives considered:** Astro (too static), Vue/Svelte (less common), Next.js (overkill)
+
+**Chart.js for Visualizations**
+- **Rationale:** Simple, widely used, good TypeScript support
+- **Alternatives considered:** D3.js (too complex), Recharts (heavier)
+
+**Sample Data First, Dynamic Loading Later**
+- **Rationale:** Get working visualization quickly, let Instance 2 focus on dynamic loading
+
+### Technical Details
+- **Files Created:** 13 files, 553 lines added
+- **Components:** App.tsx, MetricsDashboard.tsx with responsive CSS
+- **Build Output:** 304KB bundle (102KB gzipped), 853ms build time
+- **TypeScript:** 0 errors, strict mode enabled
+
+### What Didn't Work
+
+**Vite Init Attempt**
+- Tried `npm create vite@latest .` in non-empty directory → Failed
+- **Solution:** Manually created project structure
+- **Time lost:** ~5 minutes
+- **Learning:** Manual setup gives better control with existing files
+
+### Handoff to Instance 2
+**Status:** Working dashboard deployed, metrics collection functional (with known issue)
+
+**Next Steps:**
+1. Fix metrics script (exclude node_modules from LOC counts) - HIGH PRIORITY
+2. Add dynamic metrics loading (replace sample data)
+3. Get deployment URL from Brian
+4. Add more visualizations (TypeScript errors, build time, bundle size)
+
+**Known Issues:**
+- Metrics script counts node_modules (~863k LOC inflation)
+- Dashboard uses hardcoded sample data
+- Deployment URL not confirmed yet
+
+### Metrics
+```json
+{
+  "iteration": 1,
+  "date": "2025-10-12",
+  "src_loc": 244,
+  "scripts_loc": 293,
+  "typescript_errors": 0,
+  "build_success": true,
+  "build_time_ms": 853,
+  "bundle_size_kb": 304,
+  "git_commits": 4,
+  "files_changed": 13,
+  "lines_added": 553
+}
+```
+
+### Reflections
+- **Building on predecessors:** ✅ Used Instance 0's foundation and improved metrics script
+- **Tech stack decision:** Solid choice, measurable and maintainable
+- **AIDIS-first workflow:** Successfully stored planning, decisions, and comprehensive handoff
+- **Handoff quality:** Detailed context with specific line numbers, priorities, and time estimates
+- **Experiment validation:** Proved that discontinuous instance can build working software from handoff
+
+### AIDIS Contexts Stored
+- ✅ Session plan (planning type)
+- ✅ Tech stack decision (decision type)
+- ✅ Comprehensive handoff (handoff type)
+
+---
+
+## Instance 2 - [Pending]
 
 **Expected Start:** Next Claude Code session
-**Objective:** Tech stack selection, metrics implementation, initial visualization
+**Objective:** Fix metrics script, add dynamic data loading, extend visualizations
 
 ---
 

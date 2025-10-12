@@ -287,9 +287,7 @@ async function main() {
   }
 }
 
-// Run if executed directly
-if (require.main === module) {
-  main();
-}
-
 export { collectMetrics, Metrics };
+
+// Run if executed directly (ES module compatible check)
+main();
