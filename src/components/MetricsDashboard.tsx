@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
-import { Line } from 'react-chartjs-2'
+import { Line, Bar } from 'react-chartjs-2'
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend,
@@ -19,6 +20,7 @@ ChartJS.register(
   LinearScale,
   PointElement,
   LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend
@@ -135,6 +137,128 @@ function MetricsDashboard() {
     }
   }
 
+  // Git Activity Chart Data
+  const gitChartData = {
+    labels: metrics.map(m => `Instance ${m.iteration}`),
+    datasets: [
+      {
+        label: 'Lines Added',
+        data: metrics.map(m => m.git.lines_added_this_iteration),
+        backgroundColor: 'rgba(76, 175, 80, 0.7)',
+        borderColor: 'rgb(76, 175, 80)',
+        borderWidth: 1
+      },
+      {
+        label: 'Lines Deleted',
+        data: metrics.map(m => -m.git.lines_deleted_this_iteration),
+        backgroundColor: 'rgba(244, 67, 54, 0.7)',
+        borderColor: 'rgb(244, 67, 54)',
+        borderWidth: 1
+      }
+    ]
+  }
+
+  const gitChartOptions: ChartOptions<'bar'> = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: 'Git Activity Per Iteration'
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Lines Changed'
+        }
+      }
+    }
+  }
+
+  // File Growth Chart Data
+  const fileChartData = {
+    labels: metrics.map(m => `Instance ${m.iteration}`),
+    datasets: [
+      {
+        label: 'Total Files',
+        data: metrics.map(m => m.files.total),
+        borderColor: 'rgb(255, 159, 64)',
+        backgroundColor: 'rgba(255, 159, 64, 0.5)',
+        tension: 0.3
+      },
+      {
+        label: 'TypeScript Files',
+        data: metrics.map(m => m.files.typescript),
+        borderColor: 'rgb(54, 162, 235)',
+        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+        tension: 0.3
+      }
+    ]
+  }
+
+  const fileChartOptions: ChartOptions<'line'> = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: 'File Count Over Iterations'
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Number of Files'
+        }
+      }
+    }
+  }
+
+  // Commits Chart Data
+  const commitsChartData = {
+    labels: metrics.map(m => `Instance ${m.iteration}`),
+    datasets: [
+      {
+        label: 'Total Commits',
+        data: metrics.map(m => m.git.commits),
+        backgroundColor: 'rgba(156, 39, 176, 0.7)',
+        borderColor: 'rgb(156, 39, 176)',
+        borderWidth: 1
+      }
+    ]
+  }
+
+  const commitsChartOptions: ChartOptions<'bar'> = {
+    responsive: true,
+    plugins: {
+      legend: {
+        display: false
+      },
+      title: {
+        display: true,
+        text: 'Total Commits Per Iteration'
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Commits'
+        }
+      }
+    }
+  }
+
   const latestMetrics = metrics[metrics.length - 1]
 
   return (
@@ -171,6 +295,18 @@ function MetricsDashboard() {
 
       <div className="chart-container">
         <Line data={chartData} options={chartOptions} />
+      </div>
+
+      <div className="chart-container">
+        <Bar data={gitChartData} options={gitChartOptions} />
+      </div>
+
+      <div className="chart-container">
+        <Line data={fileChartData} options={fileChartOptions} />
+      </div>
+
+      <div className="chart-container">
+        <Bar data={commitsChartData} options={commitsChartOptions} />
       </div>
 
       <div className="metrics-details">
