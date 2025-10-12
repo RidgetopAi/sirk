@@ -152,7 +152,9 @@ Next instance's success depends entirely on how well you hand off!
    - [Key decision made]
 
    Handoff: [Status for next instance]"
-   git push origin main
+   git push origin Main
+
+   NOTE: Branch is "Main" (capital M), remote is SSH git@github.com:RidgetopAi/sirk.git
 
 RULES & PRINCIPLES:
 

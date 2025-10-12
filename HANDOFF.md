@@ -15,8 +15,9 @@
 - ✅ Documentation framework in place
 - ✅ Metrics collection scaffolding
 - ✅ Reusable iteration prompt created
-- ✅ GitHub repo: https://github.com/ridgetop/sirk.git
-- ✅ Netlify auto-deploy configured (will deploy on push)
+- ✅ GitHub repo: git@github.com:RidgetopAi/sirk.git (SSH configured)
+- ✅ Branch: Main (capital M)
+- ✅ Netlify auto-deploy configured (deploys on push to Main)
 
 ### What Works
 - Directory structure: `src/`, `scripts/`, `metrics/`, `docs/`
@@ -29,7 +30,7 @@
 - [ ] Set up build system (Vite/Next/Astro)
 - [ ] Implement metrics collection script
 - [ ] Create initial data visualization
-- [ ] Push to GitHub (triggers Netlify auto-deploy)
+- [ ] Push to GitHub with `git push origin Main` (triggers Netlify auto-deploy)
 - [ ] Write tests
 
 **CRITICAL:** Use AIDIS heavily! Store all decisions, learnings, and handoff info in sirk-lab project.
@@ -113,9 +114,10 @@ None yet (clean slate)
 
 ### AD-003: GitHub + Netlify Deployment
 **Date:** 2025-10-12
-**Decided:** Push to GitHub (https://github.com/ridgetop/sirk.git), Netlify auto-deploys
+**Decided:** Push to GitHub (git@github.com:RidgetopAi/sirk.git via SSH), Netlify auto-deploys
+**Details:** Branch is "Main" (capital M), push with `git push origin Main`
 **Rationale:** Standard CI/CD, automatic deployment, version control, public visibility
-**Status:** Implemented (GitHub remote configured, Netlify pending Instance 1)
+**Status:** Implemented (GitHub remote configured, code pushed, Netlify deploying)
 
 ---
 

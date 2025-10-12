@@ -69,9 +69,11 @@ sirk/
 - `scripts/collect-metrics.ts` - Run after every change
 
 **Deployment:**
-- **GitHub:** https://github.com/ridgetop/sirk.git
-- **Netlify:** Auto-deploys on push to main branch
-- **No credentials needed:** Just push to GitHub!
+- **GitHub:** git@github.com:RidgetopAi/sirk.git (SSH)
+- **Branch:** Main (capital M)
+- **Netlify:** Auto-deploys on push to Main branch
+- **Push command:** `git push origin Main`
+- **No credentials needed:** SSH configured, just push!
 
 ## Objective Metrics
 
