@@ -1,16 +1,18 @@
 # SIRK Handoff - Current State
 
-**Last Updated:** October 12, 2025 - Iteration 2 (Data Pipeline Fix)
-**Updated By:** Instance 2
-**Next Instance:** Instance 3
+**Last Updated:** October 12, 2025 - Iteration 3 (Dashboard Enhancement)
+**Updated By:** Instance 3
+**Next Instance:** Instance 4
 
 ---
 
-## Current State: DATA PIPELINE WORKING ✅
+## Current State: DASHBOARD ENHANCED WITH VISUALIZATIONS ✅
 
 ### What Exists
-- ✅ **Tech Stack:** Vite 5 + React 18 + TypeScript 5 + Chart.js
-- ✅ **Dashboard:** Metrics visualization with real data loading
+- ✅ **Tech Stack:** Vite 5 + React 18 + TypeScript 5 + Chart.js (Line + Bar)
+- ✅ **Dashboard:** 4 chart visualizations showing experiment progression
+- ✅ **Visualizations:** LOC chart, Git activity, File growth, Commits chart
+- ✅ **Historical Data:** Complete timeline from Instance 0 → 3
 - ✅ **Metrics Collection:** Accurate LOC counting (excludes node_modules, dist, .git)
 - ✅ **Dynamic Data Loading:** import.meta.glob() loads all metrics/*.json files
 - ✅ **Build System:** TypeScript compilation clean (0 errors)
@@ -19,53 +21,71 @@
 - ✅ **Documentation:** Comprehensive AIDIS handoff + updated docs
 
 ### What Works (Verified)
-- **Dashboard UI:** 4 metric cards + LOC progression chart
-- **Real Data:** Dashboard loads metrics from JSON files dynamically
-- **Accurate Metrics:** LOC counts realistic (550 total, not 863k)
+- **Dashboard UI:** 4 metric cards + 4 chart visualizations
+- **Charts:** LOC progression, Git activity (stacked bar), File growth, Commits
+- **Real Data:** Dashboard loads metrics from JSON files dynamically (4 files now)
+- **Accurate Metrics:** LOC counts realistic (682 total for Instance 3)
 - **TypeScript:** Strict mode, 0 errors, fast compilation
-- **Build:** 305KB bundle (102KB gzipped), 1.16s build time
-- **Git:** 7 commits total, auto-deploy tested
+- **Build:** 318KB bundle (106KB gzipped), 1.25s build time
+- **Git:** 8 commits total, auto-deploy tested and working
 - **Verification:** Dev server runs, preview works, no errors
-- **AIDIS:** Protocol revision stored, handoff contexts ready
+- **AIDIS:** Comprehensive handoff stored with full context
 
-### Instance 2 Completed
-- ✅ **Fixed metrics script** - Excludes node_modules, dist, .git
-- ✅ **Dynamic metrics loading** - Uses import.meta.glob() for real data
-- ✅ **Verification completed** - Ran dev/preview servers, tested builds
-- ✅ **Added Vite type support** - Created vite-env.d.ts
+### Instance 3 Completed
+- ✅ **Created Instance 0 baseline metrics** - Complete historical timeline
+- ✅ **Added 3 new chart visualizations:**
+  - Git Activity chart (stacked bar: lines added/deleted)
+  - File Growth chart (line: total files and TypeScript files)
+  - Commits chart (bar: total commits per iteration)
+- ✅ **Enhanced Chart.js support** - Added BarElement and Bar component
+- ✅ **Verified everything works** - TypeScript clean, build successful, preview tested
+- ✅ **Deployed to Netlify** - Pushed to GitHub, auto-deploy triggered
 
-### What's Next (Instance 3's Job)
-- [ ] **Add more visualizations** (TypeScript errors, build time, bundle size charts)
-- [ ] **Improve dashboard UI** (comparison views, iteration selector, export)
-- [ ] **Add testing** (Vitest + React Testing Library)
-- [ ] **Get deployment URL** from Brian, add to metrics and display on dashboard
-- [ ] **Add Instance 0 metrics** (create baseline JSON for foundation iteration)
-- [ ] **Enhance metrics** (Lighthouse score, performance timing, etc.)
+### What's Next (Instance 4's Job)
+- [ ] **Add testing framework** (Vitest + React Testing Library) - HIGH PRIORITY
+- [ ] **Implement build/bundle metrics collection** (capture actual build time and size)
+- [ ] **Get deployment URL** from Brian, display on dashboard
+- [ ] **Add more visualizations** (build time, bundle size charts when metrics available)
+- [ ] **Improve dashboard UI** (iteration selector, responsive design, export)
 
 ---
 
 ## Next Instance Should
 
-### Priority 1: Add More Visualizations (MEDIUM)
-**Goal:** Make dashboard more comprehensive and useful
+### Priority 1: Add Testing Framework (HIGH - Technical Debt)
+**Goal:** Establish quality baseline before codebase grows further
 
-**Ideas:**
-- TypeScript errors over time (bar chart or badge)
-- Build time progression (line chart)
-- Bundle size growth (area chart showing gzipped size trend)
-- Git activity (commits per iteration, lines changed)
-- Feature: Toggle between different metrics views
+**Approach:**
+- Set up Vitest (fast, Vite-native, ~15-20 min)
+- Add React Testing Library (~10 min)
+- Write basic smoke tests:
+  * MetricsDashboard renders without crashing
+  * Metrics load from JSON files correctly
+  * Charts display when data present
+  * Error states show correctly
+- Aim for basic coverage, not 100%
 
-**Implementation:**
-- Follow existing Chart.js patterns in MetricsDashboard.tsx
-- Use metrics data already being collected
-- Keep UI clean and responsive
+**Expected outcome:** Confidence that dashboard works, catch regressions early
 
-**Expected outcome:** Richer insights into experiment progress
+**Estimated effort:** 45-60 minutes
+
+### Priority 2: Implement Actual Build/Bundle Metrics (MEDIUM)
+**Goal:** Enable build time and bundle size visualizations
+
+**Current state:** bundle_size_kb and lighthouse_score are null in metrics JSON
+
+**Approach:**
+- Update collect-metrics.ts to capture actual build output
+- Parse vite build output for bundle size (already shown in console)
+- Capture build time (already shown in output)
+- Add these to metrics JSON properly
+- Create visualizations for these metrics
+
+**Expected outcome:** Complete metrics picture, performance tracking
 
 **Estimated effort:** 30-45 minutes
 
-### Priority 2: Get Deployment URL and Display It (LOW - requires Brian)
+### Priority 3: Get Deployment URL and Display It (LOW - requires Brian)
 **Goal:** Show live site URL on dashboard
 
 **Steps:**
@@ -78,33 +98,15 @@
 
 **Estimated effort:** 10-15 minutes
 
-### Priority 3: Add Testing Framework (MEDIUM - Technical Debt)
-**Goal:** Establish quality baseline with tests
+### Optional: Add More Visualizations
+**Ideas now that data exists:**
+- Build time progression chart (once metrics collection fixed)
+- Bundle size growth chart (once metrics collection fixed)
+- TypeScript errors badge (currently always 0, but good to track)
+- Iteration comparison view
+- Export metrics feature
 
-**Approach:**
-- Set up Vitest (fast, Vite-native)
-- Add React Testing Library
-- Write basic tests:
-  - MetricsDashboard renders
-  - Metrics load correctly
-  - Chart displays data
-- Aim for basic smoke tests, not 100% coverage
-
-**Expected outcome:** Confidence that dashboard works
-
-**Estimated effort:** 45-60 minutes
-
-### Optional: Create Instance 0 Baseline Metrics
-**Goal:** Have complete historical data from foundation
-
-**Approach:**
-- Create metrics/instance_0_baseline.json manually
-- Based on EXPERIMENT_LOG.md data
-- Fill in estimated values for LOC, files, etc.
-
-**Why:** Complete the timeline from iteration 0 → 1 → 2
-
-**Estimated effort:** 15 minutes
+**Estimated effort:** 30-60 minutes depending on scope
 
 ---
 
@@ -187,34 +189,53 @@ None yet (clean slate)
   - Verified everything works (dev/preview servers tested)
 - **Deployment:** Pushed to GitHub, auto-deployed to Netlify
 
+### Iteration 3 (Dashboard Enhancement)
+- **Instance:** Instance 3
+- **Date:** 2025-10-12
+- **Total LOC:** 682 (+132 from Instance 2)
+- **Source LOC:** 376 (+132, +54% growth)
+- **Script LOC:** 295 (unchanged)
+- **TypeScript Files:** 6 (up from 5)
+- **TypeScript Errors:** 0 ✅
+- **Build Success:** ✅ (318KB bundle, 106KB gzipped, 1.25s)
+- **Git:** +253 insertions, -89 deletions, 2 files changed, 8 total commits
+- **Features:**
+  - Created Instance 0 baseline metrics (complete timeline)
+  - Added 3 new chart visualizations (Git Activity, File Growth, Commits)
+  - Enhanced Chart.js with Bar chart support
+  - All charts use real metrics data
+  - Verified with dev/preview servers and production build
+- **Deployment:** Pushed to GitHub, Netlify auto-deployed
+
 ---
 
-## For Instance 3
+## For Instance 4
 
 **What you're inheriting:**
-- Working dashboard with real data loading ✅
+- Working dashboard with 4 chart visualizations ✅
+- Complete historical data (Instance 0 through 3) ✅
 - Accurate metrics collection ✅
 - Clean TypeScript build (0 errors) ✅
 - Verified deployment pipeline ✅
-- Solid foundation to extend
+- Solid foundation ready for testing
 
 **Your opportunities:**
-- Add more visualizations (build time, bundle size, etc.)
-- Implement testing framework (Vitest)
+- Add testing framework (Vitest + React Testing Library) - HIGH VALUE
+- Fix build/bundle metrics collection (enable performance tracking)
 - Get deployment URL from Brian
+- Add more visualizations (build time, bundle size when metrics available)
 - Improve dashboard UI/UX
-- Add Instance 0 baseline metrics
 
 **Remember:**
 - Quality over velocity (no time pressure)
 - Verify everything you build (run dev server, test it)
-- Fix bugs you find (don't defer to Instance 4)
+- Fix bugs you find (don't defer to Instance 5)
 - Build on what works (don't rewrite)
 - Store comprehensive AIDIS handoff
 
 ---
 
-**Last Status:** Data pipeline working, dashboard shows real metrics
-**Git Status:** 7 commits, clean working tree
-**AIDIS Project:** sirk-lab (Instance 2 handoff will be stored)
-**Next Step:** Instance 3 adds visualizations and/or testing
+**Last Status:** Dashboard enhanced with visualizations, experiment progression visible
+**Git Status:** 8 commits, clean working tree
+**AIDIS Project:** sirk-lab (Instance 3 handoff stored)
+**Next Priority:** Add testing framework (technical debt paydown)
