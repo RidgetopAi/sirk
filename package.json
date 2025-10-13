@@ -10,7 +10,8 @@
     "type-check": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "metrics": "tsx scripts/collect-metrics.ts"
+    "metrics": "tsx scripts/collect-metrics.ts && bash scripts/post-metrics-verification.sh",
+    "metrics:no-verify": "tsx scripts/collect-metrics.ts"
   },
   "dependencies": {
     "chart.js": "^4.4.0",

@@ -142,6 +142,11 @@
   transform: translateY(0);
 }
 
+.export-button:focus-visible {
+  outline: 3px solid #667eea;
+  outline-offset: 2px;
+}
+
 .export-icon {
   font-size: 1.2rem;
 }

@@ -65,6 +65,18 @@ function MetricsDashboard() {
     loadMetrics()
   }, [])
 
+  // Escape key handler to reset iteration filter
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && selectedIteration !== null) {
+        setSelectedIteration(null)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [selectedIteration])
+
   const loadMetrics = async () => {
     try {
       // Use Vite's import.meta.glob to load all metrics files
@@ -461,6 +473,7 @@ function MetricsDashboard() {
           value={selectedIteration === null ? 'all' : selectedIteration}
           onChange={handleIterationChange}
           className="iteration-select"
+          aria-label="Filter dashboard by specific iteration or view all iterations"
         >
           <option value="all">All Iterations</option>
           {metrics.map(m => (
@@ -470,44 +483,52 @@ function MetricsDashboard() {
           ))}
         </select>
         {selectedIteration !== null && (
-          <span className="selection-indicator">
+          <span className="selection-indicator" role="status" aria-live="polite">
             Showing Instance {selectedIteration} only
           </span>
         )}
       </div>
 
       <div className="export-controls">
-        <button onClick={exportToJSON} className="export-button">
-          <span className="export-icon">📥</span>
+        <button
+          onClick={exportToJSON}
+          className="export-button"
+          aria-label="Export metrics data as JSON file"
+        >
+          <span className="export-icon" aria-hidden="true">📥</span>
           Export as JSON
         </button>
-        <button onClick={exportToCSV} className="export-button">
-          <span className="export-icon">📊</span>
+        <button
+          onClick={exportToCSV}
+          className="export-button"
+          aria-label="Export metrics data as CSV spreadsheet"
+        >
+          <span className="export-icon" aria-hidden="true">📊</span>
           Export as CSV
         </button>
       </div>
 
       <div className="metrics-grid">
-        <div className="metric-card">
-          <h3>Current Iteration</h3>
+        <div className="metric-card" role="region" aria-labelledby="current-iteration-heading">
+          <h3 id="current-iteration-heading">Current Iteration</h3>
           <div className="metric-value">{latestMetrics.iteration}</div>
           <div className="metric-label">{latestMetrics.instance}</div>
         </div>
 
-        <div className="metric-card">
-          <h3>Total LOC</h3>
+        <div className="metric-card" role="region" aria-labelledby="total-loc-heading">
+          <h3 id="total-loc-heading">Total LOC</h3>
           <div className="metric-value">{latestMetrics.loc.total.toLocaleString()}</div>
           <div className="metric-label">Lines of Code</div>
         </div>
 
-        <div className="metric-card">
-          <h3>Git Commits</h3>
+        <div className="metric-card" role="region" aria-labelledby="git-commits-heading">
+          <h3 id="git-commits-heading">Git Commits</h3>
           <div className="metric-value">{latestMetrics.git.commits}</div>
           <div className="metric-label">Total Commits</div>
         </div>
 
-        <div className="metric-card">
-          <h3>TypeScript</h3>
+        <div className="metric-card" role="region" aria-labelledby="typescript-heading">
+          <h3 id="typescript-heading">TypeScript</h3>
           <div className="metric-value">
             {latestMetrics.typescript_errors === 0 ? '✓' : latestMetrics.typescript_errors}
           </div>
@@ -518,37 +539,37 @@ function MetricsDashboard() {
       </div>
 
       <ErrorBoundary fallbackMessage="Unable to render LOC chart">
-        <div className="chart-container">
+        <div className="chart-container" role="img" aria-label="Line chart showing Lines of Code growth over iterations">
           <Line data={chartData} options={chartOptions} />
         </div>
       </ErrorBoundary>
 
       <ErrorBoundary fallbackMessage="Unable to render Git Activity chart">
-        <div className="chart-container">
+        <div className="chart-container" role="img" aria-label="Bar chart showing lines added and deleted per iteration">
           <Bar data={gitChartData} options={gitChartOptions} />
         </div>
       </ErrorBoundary>
 
       <ErrorBoundary fallbackMessage="Unable to render File Growth chart">
-        <div className="chart-container">
+        <div className="chart-container" role="img" aria-label="Line chart showing file count growth over iterations">
           <Line data={fileChartData} options={fileChartOptions} />
         </div>
       </ErrorBoundary>
 
       <ErrorBoundary fallbackMessage="Unable to render Commits chart">
-        <div className="chart-container">
+        <div className="chart-container" role="img" aria-label="Bar chart showing total commits per iteration">
           <Bar data={commitsChartData} options={commitsChartOptions} />
         </div>
       </ErrorBoundary>
 
       <ErrorBoundary fallbackMessage="Unable to render Build Time chart">
-        <div className="chart-container">
+        <div className="chart-container" role="img" aria-label="Line chart showing build time over iterations">
           <Line data={buildTimeChartData} options={buildTimeChartOptions} />
         </div>
       </ErrorBoundary>
 
       <ErrorBoundary fallbackMessage="Unable to render Bundle Size chart">
-        <div className="chart-container">
+        <div className="chart-container" role="img" aria-label="Line chart showing bundle size over iterations">
           <Line data={bundleSizeChartData} options={bundleSizeChartOptions} />
         </div>
       </ErrorBoundary>
