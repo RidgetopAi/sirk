@@ -12,6 +12,7 @@ import {
   Legend,
   ChartOptions
 } from 'chart.js'
+import ErrorBoundary from './ErrorBoundary'
 import './MetricsDashboard.css'
 
 // Register Chart.js components
@@ -337,6 +338,24 @@ function MetricsDashboard() {
 
   return (
     <div className="metrics-dashboard">
+      <div className="dashboard-header">
+        <h1>SIRK Lab - Experimental Dashboard</h1>
+        <p className="experiment-description">
+          Testing whether sequential AI instances can compound improvements through proper handoffs
+        </p>
+        <div className="deployment-info">
+          <span className="deployment-label">Live Deployment:</span>
+          <a
+            href="https://sirklab.netlify.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="deployment-link"
+          >
+            sirklab.netlify.app
+          </a>
+        </div>
+      </div>
+
       <div className="metrics-grid">
         <div className="metric-card">
           <h3>Current Iteration</h3>
@@ -367,29 +386,41 @@ function MetricsDashboard() {
         </div>
       </div>
 
-      <div className="chart-container">
-        <Line data={chartData} options={chartOptions} />
-      </div>
+      <ErrorBoundary fallbackMessage="Unable to render LOC chart">
+        <div className="chart-container">
+          <Line data={chartData} options={chartOptions} />
+        </div>
+      </ErrorBoundary>
 
-      <div className="chart-container">
-        <Bar data={gitChartData} options={gitChartOptions} />
-      </div>
+      <ErrorBoundary fallbackMessage="Unable to render Git Activity chart">
+        <div className="chart-container">
+          <Bar data={gitChartData} options={gitChartOptions} />
+        </div>
+      </ErrorBoundary>
 
-      <div className="chart-container">
-        <Line data={fileChartData} options={fileChartOptions} />
-      </div>
+      <ErrorBoundary fallbackMessage="Unable to render File Growth chart">
+        <div className="chart-container">
+          <Line data={fileChartData} options={fileChartOptions} />
+        </div>
+      </ErrorBoundary>
 
-      <div className="chart-container">
-        <Bar data={commitsChartData} options={commitsChartOptions} />
-      </div>
+      <ErrorBoundary fallbackMessage="Unable to render Commits chart">
+        <div className="chart-container">
+          <Bar data={commitsChartData} options={commitsChartOptions} />
+        </div>
+      </ErrorBoundary>
 
-      <div className="chart-container">
-        <Line data={buildTimeChartData} options={buildTimeChartOptions} />
-      </div>
+      <ErrorBoundary fallbackMessage="Unable to render Build Time chart">
+        <div className="chart-container">
+          <Line data={buildTimeChartData} options={buildTimeChartOptions} />
+        </div>
+      </ErrorBoundary>
 
-      <div className="chart-container">
-        <Line data={bundleSizeChartData} options={bundleSizeChartOptions} />
-      </div>
+      <ErrorBoundary fallbackMessage="Unable to render Bundle Size chart">
+        <div className="chart-container">
+          <Line data={bundleSizeChartData} options={bundleSizeChartOptions} />
+        </div>
+      </ErrorBoundary>
 
       <div className="metrics-details">
         <h3>Latest Metrics Detail</h3>
