@@ -44,6 +44,8 @@ interface Metrics {
   }
   typescript_errors: number
   build_success: boolean
+  build_time_ms: number | null
+  bundle_size_kb: number | null
   git: {
     commits: number
     files_changed_this_iteration: number
@@ -259,6 +261,78 @@ function MetricsDashboard() {
     }
   }
 
+  // Build Time Chart Data
+  const buildTimeChartData = {
+    labels: metrics.map(m => `Instance ${m.iteration}`),
+    datasets: [
+      {
+        label: 'Build Time (ms)',
+        data: metrics.map(m => m.build_time_ms),
+        borderColor: 'rgb(255, 99, 132)',
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        tension: 0.3
+      }
+    ]
+  }
+
+  const buildTimeChartOptions: ChartOptions<'line'> = {
+    responsive: true,
+    plugins: {
+      legend: {
+        display: false
+      },
+      title: {
+        display: true,
+        text: 'Build Time Over Iterations'
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Milliseconds'
+        }
+      }
+    }
+  }
+
+  // Bundle Size Chart Data
+  const bundleSizeChartData = {
+    labels: metrics.map(m => `Instance ${m.iteration}`),
+    datasets: [
+      {
+        label: 'Bundle Size (KB)',
+        data: metrics.map(m => m.bundle_size_kb),
+        borderColor: 'rgb(75, 192, 192)',
+        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+        tension: 0.3
+      }
+    ]
+  }
+
+  const bundleSizeChartOptions: ChartOptions<'line'> = {
+    responsive: true,
+    plugins: {
+      legend: {
+        display: false
+      },
+      title: {
+        display: true,
+        text: 'Bundle Size Over Iterations'
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Kilobytes (KB)'
+        }
+      }
+    }
+  }
+
   const latestMetrics = metrics[metrics.length - 1]
 
   return (
@@ -307,6 +381,14 @@ function MetricsDashboard() {
 
       <div className="chart-container">
         <Bar data={commitsChartData} options={commitsChartOptions} />
+      </div>
+
+      <div className="chart-container">
+        <Line data={buildTimeChartData} options={buildTimeChartOptions} />
+      </div>
+
+      <div className="chart-container">
+        <Line data={bundleSizeChartData} options={bundleSizeChartOptions} />
       </div>
 
       <div className="metrics-details">

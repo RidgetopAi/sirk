@@ -35,9 +35,9 @@ describe('MetricsDashboard', () => {
       expect(screen.queryByText(/loading metrics/i)).not.toBeInTheDocument()
     }, { timeout: 3000 })
 
-    // Check that chart containers are present (4 charts)
+    // Check that chart containers are present (6 charts)
     const charts = document.querySelectorAll('.chart-container')
-    expect(charts).toHaveLength(4)
+    expect(charts).toHaveLength(6)
   })
 
   it('displays metrics details grid', async () => {
