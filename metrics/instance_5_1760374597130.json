@@ -1,0 +1,36 @@
+{
+  "iteration": 5,
+  "instance": "Instance 5",
+  "timestamp": "2025-10-13T16:56:32.996Z",
+  "date": "2025-10-13",
+  "loc": {
+    "total": 789,
+    "src": 433,
+    "scripts": 334,
+    "tests": 0
+  },
+  "files": {
+    "total": 35,
+    "typescript": 9,
+    "javascript": 0,
+    "markdown": 8
+  },
+  "typescript_errors": 0,
+  "build_success": true,
+  "build_time_ms": 1100,
+  "tests": {
+    "total": 0,
+    "passing": 0,
+    "failing": 0,
+    "coverage_percent": null
+  },
+  "git": {
+    "commits": 12,
+    "files_changed_this_iteration": 2,
+    "lines_added_this_iteration": 210,
+    "lines_deleted_this_iteration": 37
+  },
+  "deployment_url": null,
+  "bundle_size_kb": 317.77,
+  "lighthouse_score": null
+}

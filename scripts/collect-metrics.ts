@@ -36,6 +36,7 @@ interface Metrics {
   // Build & Type Safety
   typescript_errors: number;
   build_success: boolean;
+  build_time_ms: number | null;
 
   // Testing
   tests: {
@@ -110,12 +111,49 @@ function checkTypeScript(): number {
 }
 
 /**
- * Check build success
+ * Run build and capture metrics
+ * Returns bundle size in KB and build time in milliseconds
+ */
+function runBuildAndCapture(): { success: boolean; bundleSizeKb: number | null; buildTimeMs: number | null } {
+  try {
+    console.log('Running production build...');
+    const output = execSync('npm run build', { encoding: 'utf-8', stdio: 'pipe' });
+
+    // Parse bundle size - find the main index-*.js bundle (largest file)
+    let bundleSizeKb: number | null = null;
+    const bundleRegex = /dist\/assets\/index-[\w-]+\.js\s+([\d.]+)\s+kB/g;
+    let match;
+    let maxSize = 0;
+
+    while ((match = bundleRegex.exec(output)) !== null) {
+      const size = parseFloat(match[1]);
+      if (size > maxSize) {
+        maxSize = size;
+        bundleSizeKb = size;
+      }
+    }
+
+    // Parse build time - format: "✓ built in X.XXs"
+    let buildTimeMs: number | null = null;
+    const timeRegex = /✓ built in ([\d.]+)s/;
+    const timeMatch = output.match(timeRegex);
+    if (timeMatch) {
+      const timeInSeconds = parseFloat(timeMatch[1]);
+      buildTimeMs = Math.round(timeInSeconds * 1000); // Convert to milliseconds
+    }
+
+    return { success: true, bundleSizeKb, buildTimeMs };
+  } catch (error: any) {
+    console.error('Build failed:', error.message);
+    return { success: false, bundleSizeKb: null, buildTimeMs: null };
+  }
+}
+
+/**
+ * Check build success (legacy function for backward compatibility)
  */
 function checkBuild(): boolean {
   try {
-    // Instance 1 will implement actual build command
-    // For now, check if build script exists
     const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf-8'));
     return packageJson.scripts?.build !== undefined;
   } catch (error) {
@@ -178,9 +216,9 @@ async function collectMetrics(instanceNumber: number, instanceName: string): Pro
   console.log('Checking TypeScript...');
   const typescript_errors = checkTypeScript();
 
-  // Build check
-  console.log('Checking build...');
-  const build_success = checkBuild();
+  // Build and capture metrics
+  console.log('Building and capturing metrics...');
+  const buildResult = runBuildAndCapture();
 
   // Git stats
   console.log('Getting git statistics...');
@@ -194,7 +232,8 @@ async function collectMetrics(instanceNumber: number, instanceName: string): Pro
     loc,
     files,
     typescript_errors,
-    build_success,
+    build_success: buildResult.success,
+    build_time_ms: buildResult.buildTimeMs,
     tests: {
       total: 0, // Instance will implement test collection
       passing: 0,
@@ -208,7 +247,7 @@ async function collectMetrics(instanceNumber: number, instanceName: string): Pro
       lines_deleted_this_iteration: gitStats.deleted,
     },
     deployment_url: null, // Instance will add Netlify URL
-    bundle_size_kb: null, // Instance will implement bundle size check
+    bundle_size_kb: buildResult.bundleSizeKb,
     lighthouse_score: null, // Instance will implement Lighthouse check
   };
 

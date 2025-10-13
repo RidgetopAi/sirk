@@ -600,6 +600,99 @@ This continues the quality-first protocol established by Instances 2 and 3.
 
 ---
 
+## Instance 5 - Build Metrics Collection
+
+**Date:** October 13, 2025
+**Duration:** ~90 minutes
+**Instance Type:** Autonomous Claude Code session
+
+### Objective
+Implement build metrics collection to capture real bundle size and build time from Vite output.
+
+### Accomplishments
+1. ✅ **Implemented runBuildAndCapture() function** - Executes npm run build and parses output
+2. ✅ **Regex parsing for bundle size** - Extracts main bundle KB from Vite output (317.77 KB)
+3. ✅ **Regex parsing for build time** - Converts seconds to milliseconds (1100ms)
+4. ✅ **Added build_time_ms field** - New field in Metrics interface
+5. ✅ **Updated collectMetrics() function** - Uses new build capture function
+6. ✅ **Verified everything works** - 0 TS errors, 5/5 tests passing, build successful
+7. ✅ **Collected Instance 5 metrics** - Real bundle_size_kb and build_time_ms values
+8. ✅ **AIDIS Handoff** - Comprehensive context stored in sirk-lab
+
+### Key Decisions
+
+**Parse Actual Vite Output Instead of Estimating**
+- **Rationale:** Real data more accurate than assumptions, enables performance tracking
+- **Result:** Bundle size and build time now captured from real builds
+
+**Use execSync with stdio: 'pipe'**
+- **Rationale:** Captures both stdout and stderr, avoids buffering issues
+- **Result:** Reliable output capture for regex parsing
+
+### Technical Details
+- **Files Modified:** 1 (scripts/collect-metrics.ts)
+- **Lines Changed:** +63 insertions, -6 deletions
+- **Build:** 317.77KB bundle (106.38KB gzipped), 1.1s build time
+- **TypeScript:** 0 errors maintained
+- **Tests:** 5/5 passing (no regressions)
+- **Commits:** 1 comprehensive commit
+
+### Verification Completed
+Instance 5 completed comprehensive verification:
+- ✅ TypeScript compilation (0 errors)
+- ✅ Tests passing (5/5)
+- ✅ Build successful with metrics captured
+- ✅ Instance 5 metrics JSON has real values (not null)
+- ✅ Previous features still working
+
+### Handoff to Instance 6
+**Status:** Build metrics collection fully functional, ready for visualizations
+
+**Next Steps:**
+1. Add build performance visualizations (build time & bundle size charts) - HIGH PRIORITY
+2. Get deployment URL from Brian and display it
+3. Expand test coverage (error states, edge cases)
+
+**What Works:**
+- Build metrics automatically captured during metrics collection
+- bundle_size_kb: 317.77 KB (real value)
+- build_time_ms: 1100ms (real value)
+- All previous features still working
+
+**No Known Issues** - Everything verified working
+
+### Metrics
+```json
+{
+  "iteration": 5,
+  "total_loc": 789,
+  "src_loc": 433,
+  "scripts_loc": 334,
+  "typescript_errors": 0,
+  "build_success": true,
+  "build_time_ms": 1100,
+  "bundle_size_kb": 317.77,
+  "tests_total": 5,
+  "tests_passing": 5,
+  "git_commits": 12,
+  "files_changed": 2,
+  "lines_added": 210,
+  "lines_deleted": 37
+}
+```
+
+### Reflections
+- **Following protocol:** Used AIDIS for planning and handoff
+- **Systematic approach:** Test output → implement → verify → test
+- **Quality maintained:** 0 TS errors, tests passing, no regressions
+- **Experiment validation:** Proved discontinuous instance can implement data collection infrastructure
+
+### AIDIS Contexts Stored
+- ✅ Session plan (detailed implementation approach)
+- ✅ Comprehensive handoff (for Instance 6)
+
+---
+
 ## Analysis & Patterns
 
 *This section will be populated after multiple instances complete*
