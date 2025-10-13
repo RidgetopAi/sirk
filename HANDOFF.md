@@ -1,50 +1,56 @@
 # SIRK Handoff - Current State
 
-**Last Updated:** October 12, 2025 - Iteration 3 (Dashboard Enhancement)
-**Updated By:** Instance 3
-**Next Instance:** Instance 4
+**Last Updated:** October 12, 2025 - Iteration 4 (Testing Framework)
+**Updated By:** Instance 4
+**Next Instance:** Instance 5
 
 ---
 
-## Current State: DASHBOARD ENHANCED WITH VISUALIZATIONS ✅
+## Current State: TESTING FRAMEWORK IMPLEMENTED ✅
 
 ### What Exists
 - ✅ **Tech Stack:** Vite 5 + React 18 + TypeScript 5 + Chart.js (Line + Bar)
+- ✅ **Testing:** Vitest 3.2.4 + React Testing Library 16.3.0 (5 tests passing)
 - ✅ **Dashboard:** 4 chart visualizations showing experiment progression
 - ✅ **Visualizations:** LOC chart, Git activity, File growth, Commits chart
-- ✅ **Historical Data:** Complete timeline from Instance 0 → 3
+- ✅ **Historical Data:** Complete timeline from Instance 0 → 4
 - ✅ **Metrics Collection:** Accurate LOC counting (excludes node_modules, dist, .git)
 - ✅ **Dynamic Data Loading:** import.meta.glob() loads all metrics/*.json files
 - ✅ **Build System:** TypeScript compilation clean (0 errors)
 - ✅ **Deployment:** GitHub + Netlify auto-deploy working
-- ✅ **Project Structure:** src/components/, vite-env.d.ts for types
+- ✅ **Project Structure:** src/components/, vite-env.d.ts, vitest.config.ts
 - ✅ **Documentation:** Comprehensive AIDIS handoff + updated docs
 
 ### What Works (Verified)
+- **Testing:** 5/5 tests passing (renders, loading, metrics display, charts, details grid)
 - **Dashboard UI:** 4 metric cards + 4 chart visualizations
 - **Charts:** LOC progression, Git activity (stacked bar), File growth, Commits
-- **Real Data:** Dashboard loads metrics from JSON files dynamically (4 files now)
-- **Accurate Metrics:** LOC counts realistic (682 total for Instance 3)
+- **Real Data:** Dashboard loads metrics from JSON files dynamically (5 files now)
+- **Accurate Metrics:** LOC counts realistic (750 total for Instance 4)
 - **TypeScript:** Strict mode, 0 errors, fast compilation
-- **Build:** 318KB bundle (106KB gzipped), 1.25s build time
-- **Git:** 8 commits total, auto-deploy tested and working
-- **Verification:** Dev server runs, preview works, no errors
+- **Build:** 317.66KB bundle (106.35KB gzipped), 1.13s build time (faster!)
+- **Git:** 11 commits total, auto-deploy tested and working
+- **Verification:** Tests pass, dev server runs, preview works, no errors
 - **AIDIS:** Comprehensive handoff stored with full context
 
-### Instance 3 Completed
-- ✅ **Created Instance 0 baseline metrics** - Complete historical timeline
-- ✅ **Added 3 new chart visualizations:**
-  - Git Activity chart (stacked bar: lines added/deleted)
-  - File Growth chart (line: total files and TypeScript files)
-  - Commits chart (bar: total commits per iteration)
-- ✅ **Enhanced Chart.js support** - Added BarElement and Bar component
-- ✅ **Verified everything works** - TypeScript clean, build successful, preview tested
+### Instance 4 Completed
+- ✅ **Added Vitest testing framework** - Vite-native, fast test runner
+- ✅ **Added React Testing Library** - Component testing with best practices
+- ✅ **Wrote 5 passing smoke tests:**
+  - Component renders without crashing
+  - Shows loading state initially
+  - Displays dashboard with real metrics
+  - Renders 4 chart containers
+  - Displays metrics details grid
+- ✅ **Configured test environment** - vitest.config.ts, setupTests.ts
+- ✅ **Added test scripts** - npm test, npm run test:watch
+- ✅ **Verified everything still works** - 0 TS errors, build successful, tests passing
 - ✅ **Deployed to Netlify** - Pushed to GitHub, auto-deploy triggered
 
-### What's Next (Instance 4's Job)
-- [ ] **Add testing framework** (Vitest + React Testing Library) - HIGH PRIORITY
-- [ ] **Implement build/bundle metrics collection** (capture actual build time and size)
+### What's Next (Instance 5's Job)
+- [ ] **Implement build/bundle metrics collection** (HIGH - Priority 2)
 - [ ] **Get deployment URL** from Brian, display on dashboard
+- [ ] **Add more tests** (expand test coverage, mock import.meta.glob properly)
 - [ ] **Add more visualizations** (build time, bundle size charts when metrics available)
 - [ ] **Improve dashboard UI** (iteration selector, responsive design, export)
 
@@ -207,35 +213,56 @@ None yet (clean slate)
   - Verified with dev/preview servers and production build
 - **Deployment:** Pushed to GitHub, Netlify auto-deployed
 
+### Iteration 4 (Testing Framework)
+- **Instance:** Instance 4
+- **Date:** 2025-10-12
+- **Total LOC:** 750 (+68 from Instance 3)
+- **Source LOC:** 433 (+57, includes test file)
+- **Script LOC:** 295 (unchanged)
+- **Test LOC:** 0 (counted in source - test file in src/components/)
+- **TypeScript Files:** 9 (+3: vitest.config.ts, setupTests.ts, MetricsDashboard.test.tsx)
+- **TypeScript Errors:** 0 ✅
+- **Build Success:** ✅ (317.66KB bundle, 106.35KB gzipped, 1.13s - faster!)
+- **Tests:** 5/5 passing ✅
+- **Git:** +237 insertions, -79 deletions, 5 files changed, 11 total commits
+- **Features:**
+  - Added Vitest 3.2.4 + React Testing Library 16.3.0
+  - Configured test environment (jsdom)
+  - Wrote 5 passing smoke tests for MetricsDashboard
+  - Added npm test and npm run test:watch scripts
+  - Verified all previous features still working
+- **Deployment:** Pushed to GitHub, Netlify auto-deployed
+
 ---
 
-## For Instance 4
+## For Instance 5
 
 **What you're inheriting:**
 - Working dashboard with 4 chart visualizations ✅
-- Complete historical data (Instance 0 through 3) ✅
+- Testing framework with 5 passing tests ✅
+- Complete historical data (Instance 0 through 4) ✅
 - Accurate metrics collection ✅
 - Clean TypeScript build (0 errors) ✅
 - Verified deployment pipeline ✅
-- Solid foundation ready for testing
+- Solid foundation with test coverage
 
 **Your opportunities:**
-- Add testing framework (Vitest + React Testing Library) - HIGH VALUE
-- Fix build/bundle metrics collection (enable performance tracking)
-- Get deployment URL from Brian
+- Implement build/bundle metrics collection (HIGH - Priority 2)
+- Get deployment URL from Brian, display on dashboard
+- Expand test coverage (mock import.meta.glob properly)
 - Add more visualizations (build time, bundle size when metrics available)
 - Improve dashboard UI/UX
 
 **Remember:**
 - Quality over velocity (no time pressure)
-- Verify everything you build (run dev server, test it)
-- Fix bugs you find (don't defer to Instance 5)
+- Verify everything you build (run dev server, run tests)
+- Fix bugs you find (don't defer to Instance 6)
 - Build on what works (don't rewrite)
 - Store comprehensive AIDIS handoff
 
 ---
 
-**Last Status:** Dashboard enhanced with visualizations, experiment progression visible
-**Git Status:** 8 commits, clean working tree
-**AIDIS Project:** sirk-lab (Instance 3 handoff stored)
-**Next Priority:** Add testing framework (technical debt paydown)
+**Last Status:** Testing framework implemented, all tests passing, build improved
+**Git Status:** 11 commits, clean working tree
+**AIDIS Project:** sirk-lab (Instance 4 handoff stored)
+**Next Priority:** Implement build/bundle metrics collection

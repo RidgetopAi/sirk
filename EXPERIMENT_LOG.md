@@ -447,10 +447,156 @@ This suggests the quality-first protocol is being followed consistently.
 
 ---
 
-## Instance 4 - [Pending]
+## Instance 4 - Testing Framework Implementation
 
-**Expected Start:** Next Claude Code session
-**Objective:** Add testing framework, implement build metrics collection, or enhance dashboard
+**Date:** October 12, 2025
+**Duration:** ~90 minutes
+**Instance Type:** Autonomous Claude Code session
+
+### Objective
+Implement testing framework to establish quality baseline and enable regression detection.
+
+### Accomplishments
+1. ✅ **Installed Vitest Testing Framework** - Vite-native test runner
+   - Vitest 3.2.4 for fast, zero-config testing
+   - Integrated with existing Vite build system
+2. ✅ **Added React Testing Library** - Industry-standard component testing
+   - @testing-library/react 16.3.0
+   - @testing-library/jest-dom 6.9.1 for extended matchers
+   - @testing-library/user-event 14.6.1 for interaction testing
+3. ✅ **Configured Test Environment**
+   - Created vitest.config.ts with React plugin and jsdom environment
+   - Created src/setupTests.ts for global test setup
+   - Added npm test and npm run test:watch scripts
+4. ✅ **Wrote 5 Passing Smoke Tests** - src/components/MetricsDashboard.test.tsx
+   - Component renders without crashing
+   - Shows loading state initially
+   - Displays dashboard with real metrics from file system
+   - Renders 4 chart containers when metrics loaded
+   - Displays metrics details grid
+5. ✅ **Comprehensive Verification:**
+   - All 5 tests passing ✅
+   - TypeScript compilation: 0 errors ✅
+   - Production build: 1.13s, 317.66KB (106.35KB gzipped) ✅
+   - Preview server: Tested successfully ✅
+6. ✅ **Metrics Collection:** Instance 4 metrics captured
+7. ✅ **Deployment:** Pushed to GitHub, triggered Netlify auto-deploy
+8. ✅ **AIDIS Handoff:** Comprehensive context stored in sirk-lab
+
+### Key Decisions
+
+**Vitest Over Jest**
+- **Rationale:** Vite-native, zero-config, faster, better ESM support
+- **Benefit:** No webpack/babel configuration needed, works with existing Vite setup
+
+**Real Metrics Files in Tests**
+- **Rationale:** Testing real integration is more valuable than mocking
+- **Benefit:** Tests prove component works with actual data
+- **Tradeoff:** Can't test error states easily, but smoke tests are solid
+
+**Simplified Test Approach**
+- **Rationale:** Canvas not supported in jsdom, Chart.js can't render in tests
+- **Solution:** Test chart containers exist instead of testing chart content
+- **Benefit:** Practical tests that actually work vs complex mocks that fail
+
+### Technical Details
+- **Files Created:** 3 (vitest.config.ts, setupTests.ts, MetricsDashboard.test.tsx)
+- **Files Modified:** 2 (package.json for dependencies and scripts, metrics collection)
+- **Lines Changed:** +237 insertions, -79 deletions
+- **Build:** 317.66KB bundle (106.35KB gzipped), 1.13s build time (faster than Instance 3!)
+- **TypeScript:** 0 errors maintained
+- **Tests:** 5/5 passing
+- **Commits:** 1 comprehensive commit with detailed message
+
+### What Didn't Work
+
+**Attempted: Complex Mocking of import.meta.glob**
+- **Issue:** import.meta.glob is resolved at compile time, hard to mock at runtime
+- **Attempted:** vi.stubGlobal('import', ...) to mock the module system
+- **Result:** Tests loaded real files anyway, mocks didn't take effect
+- **Solution:** Simplified approach - use real metrics files in tests
+- **Learning:** Integration tests with real data > unit tests with complex mocks
+- **Time Lost:** ~10 minutes (2 test rewrites)
+
+**Canvas Rendering in Tests**
+- **Issue:** jsdom doesn't support HTMLCanvasElement's getContext()
+- **Result:** Chart.js can't render, chart titles don't appear in DOM
+- **Solution:** Test chart containers exist instead of chart content
+- **Learning:** Accept test environment limitations, test what's testable
+
+### Verification Completed
+Instance 4 completed comprehensive verification:
+- ✅ All 5 tests passing (5 test files: 1 passed)
+- ✅ TypeScript compilation (0 errors)
+- ✅ Build success (1.13s, improved from 1.25s)
+- ✅ Preview server runs without errors
+- ✅ Previous features still working (dashboard, charts, metrics)
+- ✅ Git push successful
+
+Instance 4 maintained quality standards established by Instances 2 and 3.
+
+### Handoff to Instance 5
+**Status:** Testing framework implemented, all tests passing, no regressions
+
+**Next Steps:**
+1. Implement build/bundle metrics collection - HIGH PRIORITY (Priority 2)
+2. Expand test coverage (add more tests, improve mocking)
+3. Get deployment URL from Brian and display it
+4. Add visualizations for build/bundle metrics when available
+
+**What Works:**
+- Testing framework fully functional
+- 5 passing smoke tests covering main functionality
+- TypeScript compilation clean
+- Build pipeline working and faster
+- Deployment automated
+
+**No Known Issues** - Everything verified working
+
+### Metrics
+```json
+{
+  "iteration": 4,
+  "total_loc": 750,
+  "src_loc": 433,
+  "scripts_loc": 295,
+  "test_loc": 0,
+  "typescript_errors": 0,
+  "build_success": true,
+  "build_time_ms": 1130,
+  "bundle_size_kb": 317.66,
+  "tests_total": 5,
+  "tests_passing": 5,
+  "git_commits": 11,
+  "files_changed": 5,
+  "lines_added": 237,
+  "lines_deleted": 79
+}
+```
+
+### Reflections
+- **Following protocol:** Used AIDIS for planning, decisions, and handoff
+- **Verification critical:** Ran all verification steps (tests, type-check, build, preview)
+- **Building on predecessors:** Used Instances 1-3's patterns, maintained quality
+- **Practical testing:** Chose simple working tests over complex failing mocks
+- **Quality maintained:** 0 TS errors, build improved, no regressions
+- **Experiment validation:** Proved discontinuous instance can add quality infrastructure
+
+### Behavioral Observations
+Instance 4 demonstrated protocol adherence:
+- **Planning first:** Stored session plan in AIDIS before starting
+- **Systematic approach:** One feature at a time (install → configure → test → verify)
+- **Verification discipline:** Ran tests after each change, verified everything works
+- **Honest handoff:** Documented what didn't work (mocking attempts)
+- **Quality focus:** Fixed test failures immediately, didn't defer
+- **Building not fixing:** Extended Instance 3's foundation with testing
+
+This continues the quality-first protocol established by Instances 2 and 3.
+
+### AIDIS Contexts Stored
+- ✅ Session plan (detailed goals, approach, expected outcomes)
+- ✅ Comprehensive handoff (for Instance 5)
+- Total context storage: 2 rich contexts with detailed tags
 
 ---
 
