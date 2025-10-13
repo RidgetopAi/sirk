@@ -2,6 +2,23 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
 import MetricsDashboard from './MetricsDashboard'
 
+// Helper to load and sort metrics the same way the component does
+async function loadLatestMetrics() {
+  const metricsModules = import.meta.glob('../../metrics/*.json')
+  const loadedMetrics: Array<{ iteration: number; instance: string }> = []
+
+  for (const path in metricsModules) {
+    const module = await metricsModules[path]() as { default: { iteration: number; instance: string } }
+    loadedMetrics.push(module.default)
+  }
+
+  // Sort by iteration number (same as component)
+  loadedMetrics.sort((a, b) => a.iteration - b.iteration)
+
+  // Return latest (same as component: displayMetrics[displayMetrics.length - 1])
+  return loadedMetrics[loadedMetrics.length - 1]
+}
+
 describe('MetricsDashboard', () => {
   let consoleErrorSpy: ReturnType<typeof vi.spyOn>
 
@@ -128,10 +145,13 @@ describe('MetricsDashboard', () => {
       expect(screen.queryByText(/loading metrics/i)).not.toBeInTheDocument()
     }, { timeout: 3000 })
 
-    // Should display "Instance 8" as current iteration in metric card (not dropdown)
+    // Get actual latest metrics dynamically (no hardcoding!)
+    const latestMetrics = await loadLatestMetrics()
+
+    // Should display latest instance in metric card (not dropdown)
     const currentIterationCard = screen.getByText(/current iteration/i).closest('.metric-card')
     expect(currentIterationCard).toBeInTheDocument()
-    expect(currentIterationCard).toHaveTextContent('Instance 8')
+    expect(currentIterationCard).toHaveTextContent(latestMetrics.instance)
 
     // Should have git commits count
     const commitCard = screen.getByText(/git commits/i).closest('.metric-card')
@@ -145,10 +165,13 @@ describe('MetricsDashboard', () => {
       expect(screen.queryByText(/loading metrics/i)).not.toBeInTheDocument()
     }, { timeout: 3000 })
 
-    // Latest metrics should be Instance 8 (highest iteration number)
+    // Get actual latest metrics dynamically (no hardcoding!)
+    const latestMetrics = await loadLatestMetrics()
+
+    // Verify latest metrics displayed (highest iteration number)
     // This verifies the .sort((a, b) => a.iteration - b.iteration) logic
     const currentIterationCard = screen.getByText(/current iteration/i).closest('.metric-card')
-    expect(currentIterationCard).toHaveTextContent('8')
-    expect(currentIterationCard).toHaveTextContent('Instance 8')
+    expect(currentIterationCard).toHaveTextContent(String(latestMetrics.iteration))
+    expect(currentIterationCard).toHaveTextContent(latestMetrics.instance)
   })
 })
