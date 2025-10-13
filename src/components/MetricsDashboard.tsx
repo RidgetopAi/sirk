@@ -59,6 +59,7 @@ function MetricsDashboard() {
   const [metrics, setMetrics] = useState<Metrics[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [selectedIteration, setSelectedIteration] = useState<number | null>(null)
 
   useEffect(() => {
     loadMetrics()
@@ -101,20 +102,115 @@ function MetricsDashboard() {
     return <div className="no-data">No metrics available yet</div>
   }
 
+  // Handle iteration selection
+  const handleIterationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value
+    setSelectedIteration(value === 'all' ? null : Number(value))
+  }
+
+  // Filter metrics based on selection
+  const filteredMetrics = selectedIteration === null
+    ? metrics
+    : metrics.filter(m => m.iteration === selectedIteration)
+
+  // Use filteredMetrics for chart data (or single point if specific iteration)
+  const displayMetrics = filteredMetrics.length > 0 ? filteredMetrics : metrics
+
+  // Export functions
+  const exportToJSON = () => {
+    const dataStr = JSON.stringify(displayMetrics, null, 2)
+    const dataBlob = new Blob([dataStr], { type: 'application/json' })
+    const url = URL.createObjectURL(dataBlob)
+    const link = document.createElement('a')
+    link.href = url
+    const filename = selectedIteration !== null
+      ? `sirk-metrics-instance-${selectedIteration}.json`
+      : 'sirk-metrics-all.json'
+    link.download = filename
+    link.click()
+    URL.revokeObjectURL(url)
+  }
+
+  const exportToCSV = () => {
+    // CSV headers
+    const headers = [
+      'Iteration',
+      'Instance',
+      'Date',
+      'Total LOC',
+      'Source LOC',
+      'Scripts LOC',
+      'Tests LOC',
+      'Total Files',
+      'TypeScript Files',
+      'JavaScript Files',
+      'Markdown Files',
+      'TypeScript Errors',
+      'Build Success',
+      'Build Time (ms)',
+      'Bundle Size (KB)',
+      'Git Commits',
+      'Files Changed',
+      'Lines Added',
+      'Lines Deleted'
+    ]
+
+    // CSV rows
+    const rows = displayMetrics.map(m => [
+      m.iteration,
+      m.instance,
+      m.date,
+      m.loc.total,
+      m.loc.src,
+      m.loc.scripts,
+      m.loc.tests,
+      m.files.total,
+      m.files.typescript,
+      m.files.javascript,
+      m.files.markdown,
+      m.typescript_errors,
+      m.build_success ? 'true' : 'false',
+      m.build_time_ms ?? '',
+      m.bundle_size_kb ?? '',
+      m.git.commits,
+      m.git.files_changed_this_iteration,
+      m.git.lines_added_this_iteration,
+      m.git.lines_deleted_this_iteration
+    ])
+
+    // Combine headers and rows
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.join(','))
+    ].join('\n')
+
+    // Download
+    const dataBlob = new Blob([csvContent], { type: 'text/csv' })
+    const url = URL.createObjectURL(dataBlob)
+    const link = document.createElement('a')
+    link.href = url
+    const filename = selectedIteration !== null
+      ? `sirk-metrics-instance-${selectedIteration}.csv`
+      : 'sirk-metrics-all.csv'
+    link.download = filename
+    link.click()
+    URL.revokeObjectURL(url)
+  }
+
   // Prepare chart data
   const chartData = {
-    labels: metrics.map(m => `Instance ${m.iteration}`),
+    labels: displayMetrics.map(m => `Instance ${m.iteration}`),
     datasets: [
       {
         label: 'Total LOC',
-        data: metrics.map(m => m.loc.total),
+        data: displayMetrics.map(m => m.loc.total),
         borderColor: 'rgb(102, 126, 234)',
         backgroundColor: 'rgba(102, 126, 234, 0.5)',
         tension: 0.3
       },
       {
         label: 'Source LOC',
-        data: metrics.map(m => m.loc.src),
+        data: displayMetrics.map(m => m.loc.src),
         borderColor: 'rgb(118, 75, 162)',
         backgroundColor: 'rgba(118, 75, 162, 0.5)',
         tension: 0.3
@@ -142,18 +238,18 @@ function MetricsDashboard() {
 
   // Git Activity Chart Data
   const gitChartData = {
-    labels: metrics.map(m => `Instance ${m.iteration}`),
+    labels: displayMetrics.map(m => `Instance ${m.iteration}`),
     datasets: [
       {
         label: 'Lines Added',
-        data: metrics.map(m => m.git.lines_added_this_iteration),
+        data: displayMetrics.map(m => m.git.lines_added_this_iteration),
         backgroundColor: 'rgba(76, 175, 80, 0.7)',
         borderColor: 'rgb(76, 175, 80)',
         borderWidth: 1
       },
       {
         label: 'Lines Deleted',
-        data: metrics.map(m => -m.git.lines_deleted_this_iteration),
+        data: displayMetrics.map(m => -m.git.lines_deleted_this_iteration),
         backgroundColor: 'rgba(244, 67, 54, 0.7)',
         borderColor: 'rgb(244, 67, 54)',
         borderWidth: 1
@@ -185,18 +281,18 @@ function MetricsDashboard() {
 
   // File Growth Chart Data
   const fileChartData = {
-    labels: metrics.map(m => `Instance ${m.iteration}`),
+    labels: displayMetrics.map(m => `Instance ${m.iteration}`),
     datasets: [
       {
         label: 'Total Files',
-        data: metrics.map(m => m.files.total),
+        data: displayMetrics.map(m => m.files.total),
         borderColor: 'rgb(255, 159, 64)',
         backgroundColor: 'rgba(255, 159, 64, 0.5)',
         tension: 0.3
       },
       {
         label: 'TypeScript Files',
-        data: metrics.map(m => m.files.typescript),
+        data: displayMetrics.map(m => m.files.typescript),
         borderColor: 'rgb(54, 162, 235)',
         backgroundColor: 'rgba(54, 162, 235, 0.5)',
         tension: 0.3
@@ -228,11 +324,11 @@ function MetricsDashboard() {
 
   // Commits Chart Data
   const commitsChartData = {
-    labels: metrics.map(m => `Instance ${m.iteration}`),
+    labels: displayMetrics.map(m => `Instance ${m.iteration}`),
     datasets: [
       {
         label: 'Total Commits',
-        data: metrics.map(m => m.git.commits),
+        data: displayMetrics.map(m => m.git.commits),
         backgroundColor: 'rgba(156, 39, 176, 0.7)',
         borderColor: 'rgb(156, 39, 176)',
         borderWidth: 1
@@ -264,11 +360,11 @@ function MetricsDashboard() {
 
   // Build Time Chart Data
   const buildTimeChartData = {
-    labels: metrics.map(m => `Instance ${m.iteration}`),
+    labels: displayMetrics.map(m => `Instance ${m.iteration}`),
     datasets: [
       {
         label: 'Build Time (ms)',
-        data: metrics.map(m => m.build_time_ms),
+        data: displayMetrics.map(m => m.build_time_ms),
         borderColor: 'rgb(255, 99, 132)',
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
         tension: 0.3
@@ -300,11 +396,11 @@ function MetricsDashboard() {
 
   // Bundle Size Chart Data
   const bundleSizeChartData = {
-    labels: metrics.map(m => `Instance ${m.iteration}`),
+    labels: displayMetrics.map(m => `Instance ${m.iteration}`),
     datasets: [
       {
         label: 'Bundle Size (KB)',
-        data: metrics.map(m => m.bundle_size_kb),
+        data: displayMetrics.map(m => m.bundle_size_kb),
         borderColor: 'rgb(75, 192, 192)',
         backgroundColor: 'rgba(75, 192, 192, 0.5)',
         tension: 0.3
@@ -334,7 +430,7 @@ function MetricsDashboard() {
     }
   }
 
-  const latestMetrics = metrics[metrics.length - 1]
+  const latestMetrics = displayMetrics[displayMetrics.length - 1]
 
   return (
     <div className="metrics-dashboard">
@@ -354,6 +450,41 @@ function MetricsDashboard() {
             sirklab.netlify.app
           </a>
         </div>
+      </div>
+
+      <div className="iteration-selector-container">
+        <label htmlFor="iteration-select" className="iteration-label">
+          View Iteration:
+        </label>
+        <select
+          id="iteration-select"
+          value={selectedIteration === null ? 'all' : selectedIteration}
+          onChange={handleIterationChange}
+          className="iteration-select"
+        >
+          <option value="all">All Iterations</option>
+          {metrics.map(m => (
+            <option key={m.iteration} value={m.iteration}>
+              Instance {m.iteration}
+            </option>
+          ))}
+        </select>
+        {selectedIteration !== null && (
+          <span className="selection-indicator">
+            Showing Instance {selectedIteration} only
+          </span>
+        )}
+      </div>
+
+      <div className="export-controls">
+        <button onClick={exportToJSON} className="export-button">
+          <span className="export-icon">📥</span>
+          Export as JSON
+        </button>
+        <button onClick={exportToCSV} className="export-button">
+          <span className="export-icon">📊</span>
+          Export as CSV
+        </button>
       </div>
 
       <div className="metrics-grid">

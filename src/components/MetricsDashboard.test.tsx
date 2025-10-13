@@ -128,8 +128,10 @@ describe('MetricsDashboard', () => {
       expect(screen.queryByText(/loading metrics/i)).not.toBeInTheDocument()
     }, { timeout: 3000 })
 
-    // Should display "Instance 7" as current iteration (latest in test data)
-    expect(screen.getByText(/Instance 7/i)).toBeInTheDocument()
+    // Should display "Instance 8" as current iteration in metric card (not dropdown)
+    const currentIterationCard = screen.getByText(/current iteration/i).closest('.metric-card')
+    expect(currentIterationCard).toBeInTheDocument()
+    expect(currentIterationCard).toHaveTextContent('Instance 8')
 
     // Should have git commits count
     const commitCard = screen.getByText(/git commits/i).closest('.metric-card')
@@ -143,8 +145,10 @@ describe('MetricsDashboard', () => {
       expect(screen.queryByText(/loading metrics/i)).not.toBeInTheDocument()
     }, { timeout: 3000 })
 
-    // Latest metrics should be Instance 7 (highest iteration number)
+    // Latest metrics should be Instance 8 (highest iteration number)
     // This verifies the .sort((a, b) => a.iteration - b.iteration) logic
-    expect(screen.getByText(/Instance 7/i)).toBeInTheDocument()
+    const currentIterationCard = screen.getByText(/current iteration/i).closest('.metric-card')
+    expect(currentIterationCard).toHaveTextContent('8')
+    expect(currentIterationCard).toHaveTextContent('Instance 8')
   })
 })
