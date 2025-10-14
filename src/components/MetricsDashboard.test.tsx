@@ -63,9 +63,9 @@ describe('MetricsDashboard', () => {
       expect(screen.queryByText(/loading metrics/i)).not.toBeInTheDocument()
     }, { timeout: 3000 })
 
-    // Check that chart containers are present (6 charts)
+    // Check that chart containers are present (7 charts)
     const charts = document.querySelectorAll('.chart-container')
-    expect(charts).toHaveLength(6)
+    expect(charts).toHaveLength(7) // LOC, Git, Files, Commits, Build Time, Bundle Size, Test Trends
   })
 
   it('displays metrics details grid', async () => {
@@ -118,10 +118,10 @@ describe('MetricsDashboard', () => {
     // Component should render successfully even if some metrics have null values
     // Chart.js handles null values by creating gaps in the chart
     const charts = document.querySelectorAll('.chart-container')
-    expect(charts).toHaveLength(6)
+    expect(charts).toHaveLength(7) // LOC, Git, Files, Commits, Build Time, Bundle Size, Test Trends
   })
 
-  it('renders all 6 chart containers with error boundaries', async () => {
+  it('renders all 7 chart containers with error boundaries', async () => {
     render(<MetricsDashboard />)
 
     await waitFor(() => {
@@ -130,7 +130,7 @@ describe('MetricsDashboard', () => {
 
     // Verify all chart containers are wrapped in error boundaries
     const charts = document.querySelectorAll('.chart-container')
-    expect(charts.length).toBe(6)
+    expect(charts.length).toBe(7) // LOC, Git, Files, Commits, Build Time, Bundle Size, Test Trends
 
     // Each chart should be a child of the dashboard
     charts.forEach(chart => {

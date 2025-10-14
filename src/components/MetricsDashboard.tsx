@@ -47,6 +47,12 @@ interface Metrics {
   build_success: boolean
   build_time_ms: number | null
   bundle_size_kb: number | null
+  tests?: {
+    total: number
+    passing: number
+    failing: number
+    coverage_percent: number | null
+  }
   git: {
     commits: number
     files_changed_this_iteration: number
@@ -442,6 +448,49 @@ function MetricsDashboard() {
     }
   }
 
+  // Test Trends Chart Data
+  const testTrendsChartData = {
+    labels: displayMetrics.map(m => `Instance ${m.iteration}`),
+    datasets: [
+      {
+        label: 'Total Tests',
+        data: displayMetrics.map(m => m.tests?.total ?? 0),
+        borderColor: 'rgb(156, 39, 176)',
+        backgroundColor: 'rgba(156, 39, 176, 0.5)',
+        tension: 0.3
+      },
+      {
+        label: 'Passing Tests',
+        data: displayMetrics.map(m => m.tests?.passing ?? 0),
+        borderColor: 'rgb(76, 175, 80)',
+        backgroundColor: 'rgba(76, 175, 80, 0.5)',
+        tension: 0.3
+      }
+    ]
+  }
+
+  const testTrendsChartOptions: ChartOptions<'line'> = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: 'Test Count Over Iterations'
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Number of Tests'
+        }
+      }
+    }
+  }
+
   const latestMetrics = displayMetrics[displayMetrics.length - 1]
 
   return (
@@ -571,6 +620,12 @@ function MetricsDashboard() {
       <ErrorBoundary fallbackMessage="Unable to render Bundle Size chart">
         <div className="chart-container" role="img" aria-label="Line chart showing bundle size over iterations">
           <Line data={bundleSizeChartData} options={bundleSizeChartOptions} />
+        </div>
+      </ErrorBoundary>
+
+      <ErrorBoundary fallbackMessage="Unable to render Test Trends chart">
+        <div className="chart-container" role="img" aria-label="Line chart showing test count progression over iterations">
+          <Line data={testTrendsChartData} options={testTrendsChartOptions} />
         </div>
       </ErrorBoundary>
 
