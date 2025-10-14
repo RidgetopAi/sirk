@@ -63,9 +63,9 @@ describe('MetricsDashboard', () => {
       expect(screen.queryByText(/loading metrics/i)).not.toBeInTheDocument()
     }, { timeout: 3000 })
 
-    // Check that chart containers are present (8 charts - Instance 16 added Success Factors)
+    // Check that chart containers are present (9 charts - Instance 18 added Session Duration)
     const charts = document.querySelectorAll('.chart-container')
-    expect(charts).toHaveLength(8) // LOC, Git, Files, Commits, Build Time, Bundle Size, Test Trends, Success Factors
+    expect(charts).toHaveLength(9) // LOC, Git, Files, Commits, Build Time, Bundle Size, Test Trends, Success Factors, Session Duration
   })
 
   it('displays metrics details grid', async () => {
@@ -118,7 +118,7 @@ describe('MetricsDashboard', () => {
     // Component should render successfully even if some metrics have null values
     // Chart.js handles null values by creating gaps in the chart
     const charts = document.querySelectorAll('.chart-container')
-    expect(charts).toHaveLength(8) // LOC, Git, Files, Commits, Build Time, Bundle Size, Test Trends, Success Factors
+    expect(charts).toHaveLength(9) // LOC, Git, Files, Commits, Build Time, Bundle Size, Test Trends, Success Factors, Session Duration
   })
 
   it('renders all 8 chart containers with error boundaries', async () => {
@@ -130,7 +130,7 @@ describe('MetricsDashboard', () => {
 
     // Verify all chart containers are wrapped in error boundaries
     const charts = document.querySelectorAll('.chart-container')
-    expect(charts.length).toBe(8) // LOC, Git, Files, Commits, Build Time, Bundle Size, Test Trends, Success Factors
+    expect(charts.length).toBe(9) // LOC, Git, Files, Commits, Build Time, Bundle Size, Test Trends, Success Factors, Session Duration
 
     // Each chart should be a child of the dashboard
     charts.forEach(chart => {

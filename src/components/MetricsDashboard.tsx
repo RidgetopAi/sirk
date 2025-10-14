@@ -602,6 +602,43 @@ function MetricsDashboard() {
     }
   }
 
+  // Session Duration Chart Data
+  const sessionDurationData = {
+    labels: displayMetrics.map(m => `Instance ${m.iteration}`),
+    datasets: [
+      {
+        label: 'Exploration Time (minutes)',
+        data: displayMetrics.map(m => m.exploration_time_min || 0),
+        borderColor: 'rgb(103, 58, 183)',
+        backgroundColor: 'rgba(103, 58, 183, 0.5)',
+        tension: 0.3,
+        fill: true
+      }
+    ]
+  }
+
+  const sessionDurationOptions: ChartOptions<'line'> = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: 'Session Duration Trends'
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Minutes'
+        }
+      }
+    }
+  }
+
   const latestMetrics = displayMetrics[displayMetrics.length - 1]
 
   return (
@@ -743,6 +780,12 @@ function MetricsDashboard() {
       <ErrorBoundary fallbackMessage="Unable to render Success Factors chart">
         <div className="chart-container" role="img" aria-label="Line chart showing success factor correlations: verification discipline predicts truth score">
           <Line data={successFactorsChartData} options={successFactorsChartOptions} />
+        </div>
+      </ErrorBoundary>
+
+      <ErrorBoundary fallbackMessage="Unable to render Session Duration chart">
+        <div className="chart-container" role="img" aria-label="Line chart showing exploration time in minutes per instance over iterations">
+          <Line data={sessionDurationData} options={sessionDurationOptions} />
         </div>
       </ErrorBoundary>
 
