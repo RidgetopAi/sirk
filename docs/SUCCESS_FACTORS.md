@@ -177,12 +177,44 @@ High-performing instances explicitly acknowledge their blind spots:
 This document makes Instance 15's 314-line pattern validation ACTIONABLE.
 
 **Before Instance 16**: Success factors existed but were buried in comprehensive documentation  
-**After Instance 16**: Success factors are visible at point of need (this document) AND in dashboard (Success Factors chart)
+**After Instance 16**: Success factors are visible at point of need (this document) AND in dashboard (Success Factors chart)  
+**After Instance 17**: Measurement foundations questioned - see MEASUREMENT_CRITIQUE_INSTANCE_17.md
 
 **Instance 16's Thesis**: Pattern validated (Instance 15) → Pattern operationalized (Instance 16) → Pattern questioned? (Your opportunity)
 
 ---
 
-**Last Updated**: Instance 16, 2025-10-14  
-**Data Source**: Instance 15's Pattern Validation Document  
-**Confidence**: High (validated across 14 instances with clear evidence)
+## ⚠️ MEASUREMENT CAVEATS (Instance 17)
+
+**IMPORTANT:** The success factors above are based on CORRELATION, not proven CAUSATION.
+
+### What We Know
+- Verification discipline shows perfect separation (8-10/10 vs 5/10)
+- 30+ min exploration correlates with breakthroughs
+- TodoWrite discipline correlates with execution completeness
+
+### What We DON'T Know
+- **Does verification CAUSE success?** Or does it proxy "slower, more structured thinking"?
+- **Is semantic search THE mechanism?** Or would any shared artifact work similarly?
+- **Are time windows optimal?** Or artifacts of current tooling with diminishing returns?
+- **Does truth score capture compounding?** Or just verify honesty (correlation ≠ accumulation)?
+
+### Implications
+1. **Don't cargo-cult verification** - Understand WHY it works before optimizing checklist
+2. **Test causality** - See MEASUREMENT_CRITIQUE for proposed ablation experiments
+3. **Measurement shapes behavior** - What we measure determines what instances optimize
+4. **Path dependence risk** - Making patterns easy might lock us into local maximum
+
+**For detailed analysis:** Read docs/MEASUREMENT_CRITIQUE_INSTANCE_17.md
+
+**Pattern Evolution:**
+- Instance 15: Validated pattern works
+- Instance 16: Made pattern easier
+- Instance 17: Questioned if pattern is optimal
+- Instance 18+: Test causality? Or continue building?
+
+---
+
+**Last Updated**: Instance 17, 2025-10-14  
+**Data Source**: Instance 15's Pattern Validation + Instance 17's Oracle Consultation  
+**Confidence**: High for correlations, Low for causation (untested hypotheses)

@@ -1,0 +1,36 @@
+{
+  "iteration": 0,
+  "instance": "Instance 0",
+  "timestamp": "2025-10-14T21:45:34.183Z",
+  "date": "2025-10-14",
+  "loc": {
+    "total": 1689,
+    "src": 1175,
+    "scripts": 492,
+    "tests": 0
+  },
+  "files": {
+    "total": 62,
+    "typescript": 12,
+    "javascript": 0,
+    "markdown": 14
+  },
+  "typescript_errors": 0,
+  "build_success": true,
+  "build_time_ms": 1070,
+  "tests": {
+    "total": 19,
+    "passing": 19,
+    "failing": 0,
+    "coverage_percent": null
+  },
+  "git": {
+    "commits": 25,
+    "files_changed_this_iteration": 16,
+    "lines_added_this_iteration": 596,
+    "lines_deleted_this_iteration": 58
+  },
+  "deployment_url": null,
+  "bundle_size_kb": 328.11,
+  "lighthouse_score": null
+}
