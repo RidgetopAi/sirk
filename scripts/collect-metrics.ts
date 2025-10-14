@@ -150,6 +150,52 @@ function runBuildAndCapture(): { success: boolean; bundleSizeKb: number | null; 
 }
 
 /**
+ * Run tests and capture metrics
+ * Returns test counts from vitest output
+ */
+function runTestsAndCapture(): { total: number; passing: number; failing: number } {
+  try {
+    console.log('Running tests...');
+    const output = execSync('npm test', { encoding: 'utf-8', stdio: 'pipe' });
+
+    // Parse test counts from vitest output
+    // Format: "Test Files  X passed (Y)" and "Tests  X passed (Y)"
+    let total = 0;
+    let passing = 0;
+
+    // Parse total tests: "Tests  19 passed (19)" or "Tests  18 passed, 1 failed (19)"
+    const testMatch = output.match(/Tests\s+(\d+)\s+passed(?:,\s+(\d+)\s+failed)?\s+\((\d+)\)/);
+    if (testMatch) {
+      passing = parseInt(testMatch[1]);
+      const failed = testMatch[2] ? parseInt(testMatch[2]) : 0;
+      total = parseInt(testMatch[3]);
+      const failing = failed;
+      
+      return { total, passing, failing };
+    }
+
+    // Fallback if no tests or unexpected format
+    return { total: 0, passing: 0, failing: 0 };
+  } catch (error: any) {
+    // Tests failed - try to parse from error output
+    const output = error.stdout || error.stderr || '';
+    const testMatch = output.match(/Tests\s+(\d+)\s+passed(?:,\s+(\d+)\s+failed)?\s+\((\d+)\)/);
+    
+    if (testMatch) {
+      const passing = parseInt(testMatch[1]);
+      const failing = testMatch[2] ? parseInt(testMatch[2]) : 0;
+      const total = parseInt(testMatch[3]);
+      
+      return { total, passing, failing };
+    }
+    
+    // If we can't parse, return zeros
+    console.warn('Could not parse test output');
+    return { total: 0, passing: 0, failing: 0 };
+  }
+}
+
+/**
  * Check build success (legacy function for backward compatibility)
  */
 function checkBuild(): boolean {
@@ -220,6 +266,10 @@ async function collectMetrics(instanceNumber: number, instanceName: string): Pro
   console.log('Building and capturing metrics...');
   const buildResult = runBuildAndCapture();
 
+  // Run tests and capture metrics
+  console.log('Running tests and capturing metrics...');
+  const testResult = runTestsAndCapture();
+
   // Git stats
   console.log('Getting git statistics...');
   const gitStats = getGitStats();
@@ -235,9 +285,9 @@ async function collectMetrics(instanceNumber: number, instanceName: string): Pro
     build_success: buildResult.success,
     build_time_ms: buildResult.buildTimeMs,
     tests: {
-      total: 0, // Instance will implement test collection
-      passing: 0,
-      failing: 0,
+      total: testResult.total,
+      passing: testResult.passing,
+      failing: testResult.failing,
       coverage_percent: null,
     },
     git: {
