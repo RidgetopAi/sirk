@@ -335,6 +335,110 @@ npm run build
 
 ---
 
+### Phase 10: Lesson Extraction (5-10 min) **NEW - SECONDARY OUTPUT**
+
+**CRITICAL:** This phase executes AFTER completing full ruthless verification. NEVER sacrifice verification rigor for speed.
+
+After storing comprehensive 4-part review in `sirk`, extract actionable lessons for future instances.
+
+**Purpose:**
+- Distill key patterns from review
+- Enable faster instance learning
+- Build compounding wisdom base
+- Test SIRK hypothesis with AIDIS itself
+
+**Process:**
+
+1. **Identify 2-4 Key Patterns** from your review:
+   - Success patterns (what worked and why)
+   - Failure patterns (what failed and why)
+   - Strategic insights (meta-level observations)
+
+2. **Write Concise Lesson Contexts** (200-400 words each):
+
+```markdown
+LESSON: [Concise Title - e.g., "TodoWrite Discipline Prevents Execution Gaps"]
+
+**Source:** Instance [N] review / Pattern across instances
+**Pattern Type:** Success | Failure | Strategic Insight
+**Confidence:** High | Medium | Low
+
+## What Happened
+[1-2 sentences: concrete observation]
+
+## Why It Matters
+[1-2 sentences: significance for experiment]
+
+## Actionable Insight
+[1-3 bullet points: what to do/avoid]
+
+## Evidence
+[Specific file:line or behavior observed]
+
+## Related Patterns
+[Link to other lesson tags if applicable]
+
+**Predictive Value:** [Will this help Instance N+1 succeed?]
+```
+
+3. **Tag Systematically:**
+```
+Required tags:
+- "lesson" (identifier)
+- "instance_[N]" (source)
+- Pattern type: "success_pattern" | "failure_pattern" | "strategic_insight"
+- Category: see below
+- Date: "2025-10-13"
+
+Categories:
+- verification_discipline (test running, metrics collection)
+- strategic_thinking (meta-learning, questioning premises)
+- exploration_depth (discovery time, AIDIS usage)
+- process_automation (infrastructure improvements)
+- technical_quality (code quality, architecture)
+- time_management (session pacing, rushing)
+- meta_learning (learning about learning)
+- execution_tracking (TodoWrite usage, deliverable completion)
+- test_vs_production (proof-of-concept vs real application)
+```
+
+4. **Store in sirk-lab** (where instances work):
+```bash
+mcp__aidis__project_switch sirk-lab
+
+mcp__aidis__context_store(
+  content: "[lesson content]",
+  type: "lessons",
+  tags: ["lesson", "instance_[N]", "success_pattern", "verification_discipline", "2025-10-13"]
+)
+```
+
+**Example Lessons:**
+
+From Instance 10:
+- TodoWrite discipline correlates with completion (success pattern)
+- Dynamic assertions prevent systemic cycles (strategic insight)
+
+From Instance 11:
+- Test data ≠ production data creates false completion (failure pattern)
+- Strategic thinking ≠ execution completeness (strategic insight)
+
+**Quality Standards:**
+- Concise: 200-400 words per lesson (not 3000+ like reviews)
+- Actionable: Clear do/avoid guidance
+- Evidence-based: Cite specific observations
+- Discoverable: Rich tagging for semantic search
+
+**Time Investment:**
+- Extract lessons: 5-10 minutes (after 40 min review)
+- Total per instance: 45-50 minutes
+- Benefit: Future instances learn 10x faster
+
+**Key Principle:**
+Lessons are EXTRACTED FROM thorough reviews, not INSTEAD OF reviews. Data integrity is paramount. Lesson extraction is value-add, not replacement.
+
+---
+
 ## Documentation Template
 
 **Store this in project `sirk` after review:**
@@ -687,7 +791,10 @@ The reward isn't in being nice - it's in discovering patterns, exposing gaps, an
 
 ---
 
-**Last Updated:** October 13, 2025 - Post-Instance 9 Review
-**Major Update:** Added Phase 8 (Exploration & Discovery Assessment) to evaluate new success criteria: strategic thinking, insight depth, AIDIS usage patterns, and exploration vs execution mindset.
-**Status:** Ready for Instance 10+ reviews under new exploration-focused paradigm
+**Last Updated:** October 13, 2025 - Post-Instance 11 Review
+**Major Updates:**
+- Phase 8: Exploration & Discovery Assessment (evaluates strategic thinking, insight depth, AIDIS usage)
+- Phase 10: Lesson Extraction (NEW - distills actionable wisdom for future instances)
+**Status:** Ready for Instance 12+ reviews with dual output (ruthless verification + actionable lessons)
 **Authority:** Brian (Experiment Controller)
+**Principle:** Truth and verification ALWAYS come first. Lesson extraction is secondary value-add.
