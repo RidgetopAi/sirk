@@ -59,6 +59,15 @@ interface Metrics {
     lines_added_this_iteration: number
     lines_deleted_this_iteration: number
   }
+  verification?: {
+    tests_run: boolean
+    typecheck_run: boolean
+    build_run: boolean
+    browser_verified: boolean
+    metrics_collected: boolean
+  }
+  truth_score?: number  // From reviews (0-10 scale)
+  exploration_time_min?: number  // Approximate exploration time
 }
 
 function MetricsDashboard() {
@@ -491,6 +500,108 @@ function MetricsDashboard() {
     }
   }
 
+  // Success Factors Chart Data (Instance 15's validated pattern)
+  // Truth scores from reviews: Perfect separation verified instances (8-10) vs unverified (5)
+  const successFactorsChartData = {
+    labels: displayMetrics.map(m => `Instance ${m.iteration}`),
+    datasets: [
+      {
+        label: 'Truth Score (0-10)',
+        data: displayMetrics.map(m => m.truth_score ?? null),
+        borderColor: 'rgb(255, 99, 132)',
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        tension: 0.3,
+        yAxisID: 'y',
+      },
+      {
+        label: 'Verification Score (0-5)',
+        data: displayMetrics.map(m => {
+          if (!m.verification) return null
+          const v = m.verification
+          const score = (v.tests_run ? 1 : 0) + (v.typecheck_run ? 1 : 0) + 
+                       (v.build_run ? 1 : 0) + (v.browser_verified ? 1 : 0) +
+                       (v.metrics_collected ? 1 : 0)
+          return score
+        }),
+        borderColor: 'rgb(54, 162, 235)',
+        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+        tension: 0.3,
+        yAxisID: 'y1',
+      },
+      {
+        label: 'Exploration Time (min)',
+        data: displayMetrics.map(m => m.exploration_time_min ?? null),
+        borderColor: 'rgb(255, 206, 86)',
+        backgroundColor: 'rgba(255, 206, 86, 0.5)',
+        tension: 0.3,
+        yAxisID: 'y2',
+      }
+    ]
+  }
+
+  const successFactorsChartOptions: ChartOptions<'line'> = {
+    responsive: true,
+    interaction: {
+      mode: 'index' as const,
+      intersect: false,
+    },
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: 'Success Factors: Verification → Truth Score Correlation (Instance 15 Pattern)'
+      },
+      tooltip: {
+        callbacks: {
+          afterLabel: function(context) {
+            const idx = context.dataIndex
+            const m = displayMetrics[idx]
+            if (context.datasetIndex === 0 && m.truth_score) {
+              return m.truth_score >= 8 ? '✅ Verified Instance' : '⚠️ Unverified'
+            }
+            return ''
+          }
+        }
+      }
+    },
+    scales: {
+      y: {
+        type: 'linear' as const,
+        display: true,
+        position: 'left' as const,
+        beginAtZero: true,
+        max: 10,
+        title: {
+          display: true,
+          text: 'Truth Score (0-10)'
+        }
+      },
+      y1: {
+        type: 'linear' as const,
+        display: true,
+        position: 'right' as const,
+        beginAtZero: true,
+        max: 5,
+        title: {
+          display: true,
+          text: 'Verification Score (0-5)'
+        },
+        grid: {
+          drawOnChartArea: false,
+        },
+      },
+      y2: {
+        type: 'linear' as const,
+        display: false,
+        position: 'right' as const,
+        beginAtZero: true,
+        max: 60,
+      }
+    }
+  }
+
   const latestMetrics = displayMetrics[displayMetrics.length - 1]
 
   return (
@@ -626,6 +737,12 @@ function MetricsDashboard() {
       <ErrorBoundary fallbackMessage="Unable to render Test Trends chart">
         <div className="chart-container" role="img" aria-label="Line chart showing test count progression over iterations">
           <Line data={testTrendsChartData} options={testTrendsChartOptions} />
+        </div>
+      </ErrorBoundary>
+
+      <ErrorBoundary fallbackMessage="Unable to render Success Factors chart">
+        <div className="chart-container" role="img" aria-label="Line chart showing success factor correlations: verification discipline predicts truth score">
+          <Line data={successFactorsChartData} options={successFactorsChartOptions} />
         </div>
       </ErrorBoundary>
 

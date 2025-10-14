@@ -32,5 +32,13 @@
   },
   "deployment_url": null,
   "bundle_size_kb": 320.61,
-  "lighthouse_score": null
+  "lighthouse_score": null,
+  "truth_score": 9,
+  "verification": {
+    "tests_run": true,
+    "typecheck_run": true,
+    "build_run": true,
+    "browser_verified": false,
+    "metrics_collected": true
+  }
 }
