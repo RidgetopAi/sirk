@@ -11,6 +11,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { execSync } from 'child_process';
+import * as readline from 'readline';
 
 interface Metrics {
   iteration: number;
@@ -60,6 +61,21 @@ interface Metrics {
   // Performance (if applicable)
   bundle_size_kb: number | null;
   lighthouse_score: number | null;
+
+  // Instance 22: Outcome-Oriented Metrics (Minimal Validation Set)
+  // Testing Instance 21's hypothesis: Do these distinguish gold standards?
+  exploration_time_minutes?: number;
+  verification_completeness?: {
+    tests_ran: boolean;
+    typecheck_ran: boolean;
+    build_ran: boolean;
+    browser_verified: boolean;
+    deployment_verified: boolean;
+    edge_cases_tested: boolean;
+    git_push_verified: boolean;
+  };
+  fix_type?: 'symptom_fix' | 'root_cause_fix' | 'systemic_fix' | 'defense_in_depth' | 'none';
+  blind_spot_prediction?: string;
 }
 
 /**
@@ -323,6 +339,88 @@ function saveMetrics(metrics: Metrics): string {
 }
 
 /**
+ * Prompt for outcome-oriented metrics (Instance 22 validation experiment)
+ */
+async function promptOutcomeMetrics(): Promise<{
+  exploration_time_minutes: number;
+  verification_completeness: {
+    tests_ran: boolean;
+    typecheck_ran: boolean;
+    build_ran: boolean;
+    browser_verified: boolean;
+    deployment_verified: boolean;
+    edge_cases_tested: boolean;
+    git_push_verified: boolean;
+  };
+  fix_type: 'symptom_fix' | 'root_cause_fix' | 'systemic_fix' | 'defense_in_depth' | 'none';
+  blind_spot_prediction: string;
+}> {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  const question = (query: string): Promise<string> => {
+    return new Promise(resolve => rl.question(query, resolve));
+  };
+
+  console.log('\n📋 OUTCOME-ORIENTED METRICS (Instance 22 Validation Experiment)\n');
+  console.log('Testing Instance 21\'s hypothesis: Do these metrics distinguish gold standards?\n');
+
+  // Exploration time
+  const explorationAnswer = await question('How many minutes did you spend in EXPLORATION/DISCOVERY phase? (e.g., 90): ');
+  const exploration_time_minutes = parseInt(explorationAnswer) || 0;
+
+  // Verification completeness
+  console.log('\n✅ VERIFICATION COMPLETENESS (Answer yes/no for each):');
+  const tests_ran = (await question('  Did you run the test suite? (yes/no): ')).toLowerCase().startsWith('y');
+  const typecheck_ran = (await question('  Did you run TypeScript type checking? (yes/no): ')).toLowerCase().startsWith('y');
+  const build_ran = (await question('  Did you run the production build? (yes/no): ')).toLowerCase().startsWith('y');
+  const browser_verified = (await question('  Did you open and verify in browser? (yes/no): ')).toLowerCase().startsWith('y');
+  const deployment_verified = (await question('  Did you verify deployed site? (yes/no): ')).toLowerCase().startsWith('y');
+  const edge_cases_tested = (await question('  Did you test edge cases/error scenarios? (yes/no): ')).toLowerCase().startsWith('y');
+  const git_push_verified = (await question('  Did you verify git push succeeded? (yes/no): ')).toLowerCase().startsWith('y');
+
+  // Fix type
+  console.log('\n🔧 FIX TYPE (What kind of work did you do?):');
+  console.log('  1. symptom_fix - Addressed visible problem only');
+  console.log('  2. root_cause_fix - Eliminated source of problem');
+  console.log('  3. systemic_fix - Prevented entire class of problems');
+  console.log('  4. defense_in_depth - Multiple protective layers');
+  console.log('  5. none - No fixes, pure analysis/documentation');
+  const fixTypeAnswer = await question('  Enter number (1-5): ');
+  const fixTypeMap: Record<string, 'symptom_fix' | 'root_cause_fix' | 'systemic_fix' | 'defense_in_depth' | 'none'> = {
+    '1': 'symptom_fix',
+    '2': 'root_cause_fix',
+    '3': 'systemic_fix',
+    '4': 'defense_in_depth',
+    '5': 'none'
+  };
+  const fix_type = fixTypeMap[fixTypeAnswer.trim()] || 'none';
+
+  // Blind spot prediction
+  console.log('\n🔮 BLIND SPOT PREDICTION (Epistemic humility):');
+  const blind_spot_prediction = await question('  What might Instance 23 see that you can\'t? (1-2 sentences): ');
+
+  rl.close();
+
+  return {
+    exploration_time_minutes,
+    verification_completeness: {
+      tests_ran,
+      typecheck_ran,
+      build_ran,
+      browser_verified,
+      deployment_verified,
+      edge_cases_tested,
+      git_push_verified
+    },
+    fix_type,
+    blind_spot_prediction: blind_spot_prediction.trim()
+  };
+}
+
+/**
  * Display metrics summary
  */
 function displaySummary(metrics: Metrics): void {
@@ -388,8 +486,16 @@ async function main() {
 
   try {
     const metrics = await collectMetrics(instanceNumber, instanceName);
-    const filepath = saveMetrics(metrics);
-    displaySummary(metrics);
+
+    // Instance 22: Prompt for outcome-oriented metrics (validation experiment)
+    const outcomeMetrics = await promptOutcomeMetrics();
+    const metricsWithOutcome = {
+      ...metrics,
+      ...outcomeMetrics
+    };
+
+    const filepath = saveMetrics(metricsWithOutcome);
+    displaySummary(metricsWithOutcome);
 
     console.log('✨ Metrics collection complete!\n');
     process.exit(0);
