@@ -358,17 +358,27 @@ function displaySummary(metrics: Metrics): void {
 async function main() {
   // Parse command line arguments
   const args = process.argv.slice(2);
-  const instanceNumber = parseInt(args[0]) || 0;
+
+  // Require instance number argument (root cause fix - don't default to 0)
+  if (!args[0]) {
+    console.error('\n❌ ERROR: Instance number required.\n');
+    console.error('Usage:');
+    console.error('  npx tsx scripts/collect-metrics.ts <instance_number> <instance_name>');
+    console.error('\nExample:');
+    console.error('  npx tsx scripts/collect-metrics.ts 20 "Instance 20"\n');
+    process.exit(1);
+  }
+
+  const instanceNumber = parseInt(args[0]);
   const instanceName = args[1] || `Instance ${instanceNumber}`;
 
   // Validate instanceNumber (prevent Instance 0 creation except baseline)
-  if (instanceNumber === 0) {
+  if (instanceNumber === 0 || isNaN(instanceNumber)) {
     console.error('\n❌ ERROR: Instance 0 is reserved for baseline metrics only.\n');
     console.error('Usage:');
     console.error('  npx tsx scripts/collect-metrics.ts <instance_number> <instance_name>');
     console.error('\nExample:');
-    console.error('  npx tsx scripts/collect-metrics.ts 19 "Instance 19"\n');
-    console.error('💡 Tip: Use "npm run metrics" (which will prompt for instance number)\n');
+    console.error('  npx tsx scripts/collect-metrics.ts 20 "Instance 20"\n');
     process.exit(1);
   }
 
