@@ -361,6 +361,17 @@ async function main() {
   const instanceNumber = parseInt(args[0]) || 0;
   const instanceName = args[1] || `Instance ${instanceNumber}`;
 
+  // Validate instanceNumber (prevent Instance 0 creation except baseline)
+  if (instanceNumber === 0) {
+    console.error('\n❌ ERROR: Instance 0 is reserved for baseline metrics only.\n');
+    console.error('Usage:');
+    console.error('  npx tsx scripts/collect-metrics.ts <instance_number> <instance_name>');
+    console.error('\nExample:');
+    console.error('  npx tsx scripts/collect-metrics.ts 19 "Instance 19"\n');
+    console.error('💡 Tip: Use "npm run metrics" (which will prompt for instance number)\n');
+    process.exit(1);
+  }
+
   console.log('🔬 SIRK Metrics Collection\n');
   console.log(`Instance: ${instanceName}`);
   console.log(`Iteration: ${instanceNumber}\n`);

@@ -21,9 +21,31 @@ if [ $? -eq 0 ]; then
   echo "✅  SUCCESS: All tests passed after metrics collection"
   echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
   echo ""
-  echo "Metrics collection completed successfully!"
-  echo "Tests remain stable. Safe to commit."
-  echo ""
+
+  # Check git push status (Instance 19: automate manual steps)
+  echo "🔍  Checking git push status..."
+  if git status | grep -q "Your branch is ahead of"; then
+    echo ""
+    echo "⚠️  WARNING: Local commits not pushed to remote!"
+    echo ""
+    echo "This is the deployment blind spot that affected:"
+    echo "  - Instance 15: Forgot git push (deployment freeze)"
+    echo "  - Instance 16: Forgot git push (deployment freeze)"
+    echo "  - Instance 18: Forgot git push (deployment freeze)"
+    echo ""
+    echo "💡 Action required:"
+    echo "   git push origin Main"
+    echo ""
+    echo "Metrics collection successful, but remember to push!"
+    echo ""
+  else
+    echo "✅  Git status: up to date with remote"
+    echo ""
+    echo "Metrics collection completed successfully!"
+    echo "Tests remain stable. Safe to commit."
+    echo ""
+  fi
+
   exit 0
 else
   echo ""

@@ -174,4 +174,30 @@ describe('MetricsDashboard', () => {
     expect(currentIterationCard).toHaveTextContent(String(latestMetrics.iteration))
     expect(currentIterationCard).toHaveTextContent(latestMetrics.instance)
   })
+
+  it('data quality: should not have Instance 0 files except baseline', async () => {
+    // Load all metrics files
+    const metricsModules = import.meta.glob('../../metrics/*.json')
+    const loadedMetrics: Array<{ iteration: number; instance: string; filename?: string }> = []
+
+    for (const path in metricsModules) {
+      const module = await metricsModules[path]() as { default: { iteration: number; instance: string } }
+      const filename = path.split('/').pop() || ''
+      loadedMetrics.push({ ...module.default, filename })
+    }
+
+    // Filter Instance 0 files that are NOT baseline
+    const invalidInstance0Files = loadedMetrics.filter(m =>
+      m.iteration === 0 && !m.filename?.includes('baseline')
+    )
+
+    // Should have ZERO invalid Instance 0 files
+    expect(invalidInstance0Files).toHaveLength(0)
+
+    // If this fails, it means collect-metrics.ts was called without args
+    // and created Instance 0 files. The validation should prevent this.
+    if (invalidInstance0Files.length > 0) {
+      console.error('❌ Invalid Instance 0 files found:', invalidInstance0Files.map(m => m.filename))
+    }
+  })
 })
