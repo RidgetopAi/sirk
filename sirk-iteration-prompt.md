@@ -23,7 +23,6 @@ CORE PRINCIPLES:
 ❗ **Insights compound** - Build on previous thinking, not just code
 ❗ **Semantic search first** - Retrieve knowledge on-demand, avoid context overload
 ❗ **Verify rigorously** - "It compiles" ≠ "it works"
-❗ **ast-grep for navigation** - Find patterns efficiently, read targeted files only
 ❗ **Think deeper than predecessors** - Don't just execute, extend their thinking
 
 STARTUP SEQUENCE:
@@ -36,7 +35,7 @@ STARTUP SEQUENCE:
 
 3. Understand the current problem space:
    mcp__aidis__context_search(query: "current state and priorities")
-   mcp__aidis__context_search(query: "critical issues or patterns")
+   mcp__aidis__smart_search(query: "critical issues patterns")
 
 **Your Entry Mode: EXPLORER, not EXECUTOR**
 Don't look for a todo list. Look for patterns, problems, and opportunities.
@@ -52,48 +51,43 @@ Understand through active exploration, not passive reading.
 
 Search for patterns and insights:
   mcp__aidis__context_search(query: "what worked well")
-  mcp__aidis__context_search(query: "failed attempts and lessons")
-  mcp__aidis__context_search(query: "architectural decisions")
-  mcp__aidis__context_search(query: "recurring problems")
-  mcp__aidis__smart_search(query: "technical debt")
+  mcp__aidis__context_search(query: "failed attempts lessons")
+  mcp__aidis__smart_search(query: "recurring problems")
+  mcp__aidis__smart_search(query: "architectural decisions")
+  mcp__aidis__decision_search(query: "technical choices")
 
 Don't just read the latest handoff - discover the THINKING behind the code.
 
-**1B. Code Exploration (Efficient navigation):**
+**1B. Code Exploration (Efficient discovery):**
 
-Use ast-grep to find patterns WITHOUT reading full files:
+Use Glob to find what exists:
+  Glob pattern: "**/*.test.ts*"      # What tests exist?
+  Glob pattern: "src/components/*.tsx" # What components?
+  Glob pattern: "scripts/*.ts"         # What automation?
 
-  # Find all React state hooks (understand state management)
-  ast-grep --pattern 'useState<$T>($INIT)'
-
-  # Find test assertions (understand what's tested)
-  ast-grep --pattern 'expect($A).toBe($B)'
-
-  # Find chart configurations (understand visualization patterns)
-  ast-grep --pattern 'ChartOptions<$T>'
-
-  # Find error handling patterns
-  ast-grep --pattern 'try { $$$ } catch ($E) { $$$ }'
-
-Use Glob for discovery:
-  # What test files exist?
-  Glob pattern: "**/*.test.ts*"
-
-  # What components are there?
-  Glob pattern: "src/components/*.tsx"
+Use smart_search for code patterns:
+  mcp__aidis__smart_search(query: "state management hooks")
+  mcp__aidis__smart_search(query: "chart visualization")
+  mcp__aidis__smart_search(query: "error handling patterns")
 
 **Only THEN read targeted files** based on what you discovered.
 
-**1C. Active Questions (Answer these through exploration):**
+**1C. Verification Reality Check (Run these FIRST):**
+  npm run type-check  # Are there hidden TypeScript errors?
+  npm test            # Do tests actually pass as claimed?
+  npm run build       # Does build actually work?
+  npm run dev         # Can you see it in browser?
+
+**1D. Active Questions (Answer through exploration):**
 
 Technical Understanding:
 - What's the architecture? (trace component tree, data flow)
-- What patterns are used? (state management, error handling, testing)
-- What works vs what's claimed? (run tests, check build)
+- What patterns are used? (state management, testing, error handling)
+- What works vs what's claimed? (tests, build, visual check)
 
 Pattern Recognition:
-- What problems keep recurring? (search for "issue", "bug", "failed")
-- What decisions were hard? (search for "decision", "alternative")
+- What problems keep recurring? (search "issue", "bug", "failed")
+- What decisions were hard? (search "decision", "alternative")
 - What did previous instances misunderstand?
 
 Opportunity Identification:
@@ -101,13 +95,8 @@ Opportunity Identification:
 - What assumptions could be challenged?
 - What problems aren't being addressed?
 
-**Verification Reality Check:**
-  npm run type-check  # Are there hidden TypeScript errors?
-  npm test            # Do tests actually pass as claimed?
-  npm run build       # Does build actually work?
-
 **Don't move to PLAN until you can answer:**
-1. What is this system trying to do? (not just "dashboard" - what problem does it solve?)
+1. What is this system trying to do? (the actual problem it solves)
 2. What patterns do previous instances keep using?
 3. What problems keep recurring?
 4. Where's the unexplored opportunity?
@@ -117,7 +106,7 @@ Opportunity Identification:
 Phase 2: THINK (15-25 min - Strategic, not tactical)
 Choose what to explore, not just what to execute.
 
-**2A. Problem Framing (Not task execution):**
+**2A. Problem Framing:**
 
 Don't ask: "What's on the todo list?"
 Ask: "What problem should I solve and WHY?"
@@ -173,7 +162,7 @@ Consider alternatives:
     ## Questions for Future Instances
     [What I'm uncertain about, what to explore next]",
     type: "planning",
-    tags: ["instance_[N]", "strategic_thinking", "session_plan", "[problem_domain]", "2025-10-13"]
+    tags: ["instance_[N]", "strategic_thinking", "[problem_domain]", "2025-10-14"]
   )
 
 **Move to BUILD when you have a clear thesis and verification strategy.**
@@ -193,10 +182,12 @@ Implement thoughtfully, documenting your learning.
 
 When you make a significant choice:
   mcp__aidis__decision_record(
-    decision: "[What you decided]",
+    decisionType: "architecture",
+    title: "[What you decided]",
+    description: "[Implementation details]",
     rationale: "[Why - the thinking behind it]",
-    alternatives: "[What you didn't choose and why]",
-    tags: ["instance_[N]", "architecture", "[specific_topic]"]
+    alternativesConsidered: [{name: "Alternative", pros: "...", cons: "...", reasonRejected: "..."}],
+    tags: ["instance_[N]", "[specific_topic]"]
   )
 
 **3C. Capture Failed Attempts (CRITICAL for learning):**
@@ -216,7 +207,7 @@ When something doesn't work:
 
 **3D. Use Semantic Search When Stuck:**
   mcp__aidis__context_search(query: "[your specific problem]")
-  mcp__aidis__decision_search(query: "[related architectural decision]")
+  mcp__aidis__smart_search(query: "[related technical issue]")
 
 **Move to VERIFY when implementation feels complete.**
 
@@ -231,43 +222,34 @@ Prove your work actually functions. No assumptions, no hand-waving.
    npm run type-check
    → 0 errors required
 
-2. Build success (must complete):
-   npm run build
-   → Check bundle size, build time
-
-3. Test suite (must pass):
+2. Test suite (must pass):
    npm test
    → ALL tests must pass (not "most" tests)
    → If tests fail, go back to BUILD
 
-4. Development server (must run):
+3. Build success (must complete):
+   npm run build
+   → Check bundle size, build time
+
+4. Development server (MANDATORY - NOT OPTIONAL):
    npm run dev
-   → Actually OPEN the browser
-   → Click through EVERY feature you built
-   → Test edge cases, null values, errors
+   → MUST open browser and test EVERY feature you built
+   → Click through features, test edge cases, null values, errors
+   → If you can't verify browser: DOCUMENT IT HONESTLY (don't claim you did)
 
 **4B. Functional Verification:**
 
 For each feature you built:
 - Does it work with real data? (not just mock)
 - Does it handle errors gracefully?
-- Does it work on mobile? (responsive design)
 - Does it maintain state correctly?
 - Does it perform well? (no lag, fast load)
 
-**4C. Regression Testing:**
-
-Check previous features still work:
-- Run through main user workflows
-- Test features built by previous instances
-- Verify nothing broke
-
-**4D. Reality Check:**
+**4C. Reality Check:**
 
 Can you honestly say:
 ✅ "I tested this with real data"
 ✅ "I tested edge cases"
-✅ "I verified previous features still work"
 ✅ "All tests pass"
 ✅ "TypeScript is clean"
 ✅ "Build succeeds"
@@ -286,13 +268,13 @@ Phase 5: MEASURE (10-15 min - Capture objective data)
 Document what actually happened.
 
 **5A. Collect Metrics:**
-  npm run metrics [N] "Instance [N]"
 
-Review the metrics JSON:
-- Do numbers match reality?
-- Any anomalies to investigate?
+Run metrics collection directly (NOT via npm script):
+  npx tsx scripts/collect-metrics.ts [N] "Instance [N]"
 
-**5B. Commit and Deploy:**
+Review the metrics JSON - do numbers match reality?
+
+**5B. Commit and Push (BOTH steps required):**
 
   git add .
   git commit -m "Instance [N]: [Clear description of what and why]
@@ -304,10 +286,16 @@ Review the metrics JSON:
   Build: [Time, bundle size]
   TypeScript: [0 errors]"
 
-  git push origin Main
+  git push origin Main    ⬅️ REQUIRED - don't skip this!
 
-Wait for Netlify deployment.
+Check git status shows "up to date with origin/Main"
+
+**5C. Verify Deployment:**
+
+Wait for Netlify deployment (auto-triggers from push).
 Check deployed site: https://sirklab.netlify.app/
+
+If you can't check deployed site, document: "Could not verify deployment (reason)"
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -327,9 +315,6 @@ Enable next instance to think DEEPER than you did.
     ## Key Realizations
     [What you understand now that you didn't at start]
 
-    ## Architectural Understanding
-    [How pieces connect, why design decisions were made]
-
     ## What Worked Well
     [Approaches that were effective and why]
 
@@ -346,9 +331,12 @@ Enable next instance to think DEEPER than you did.
     [Not 'do X' but 'consider Y' or 'explore Z']
 
     ## What Would I Explore With More Time?
-    [Interesting directions you didn't pursue]",
+    [Interesting directions you didn't pursue]
+
+    ## My Blind Spot Prediction
+    [What might Instance [N+1] see that you can't?]",
     type: "reflections",
-    tags: ["instance_[N]", "insights", "meta_learning", "strategic", "handoff"]
+    tags: ["instance_[N]", "insights", "meta_learning", "strategic"]
   )
 
 **6B. Store Tactical Handoff:**
@@ -366,7 +354,7 @@ Enable next instance to think DEEPER than you did.
     - Tests: [X/X passing]
     - TypeScript: [0 errors]
     - Build: [Time, bundle size]
-    - Deployed: [URL]
+    - Deployed: [Yes/No - URL if yes]
 
     ## Known Issues (if any)
     [Specific problems with severity and context]
@@ -374,34 +362,19 @@ Enable next instance to think DEEPER than you did.
     ## Problem Spaces Worth Exploring
     [Areas that need attention, not prescriptive tasks]",
     type: "completion",
-    tags: ["instance_[N]", "handoff", "status", "verified"]
+    tags: ["instance_[N]", "handoff", "verified"]
   )
 
-**6C. Update Brief Status (Optional - ONLY if helpful):**
+**EMPHASIS: AIDIS contexts are the primary handoff mechanism.**
 
-If you want to leave a breadcrumb in HANDOFF.md:
-- One paragraph: "Instance N built X, verified Y, explored Z"
-- Current test count, TypeScript status
-- Link to AIDIS: "See sirk-lab contexts for detailed insights"
-
-**EMPHASIS: AIDIS is the primary handoff mechanism.**
-
-**6D. Store Decisions Made:**
-
-For any significant architectural choice:
-  mcp__aidis__decision_record(
-    decision: "[What you decided]",
-    rationale: "[Thinking behind it]",
-    alternatives: "[Other options considered]",
-    tags: ["instance_[N]", "architecture", "[topic]"]
-  )
+Use smart_search and context_search to discover what predecessors learned.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 PRINCIPLES FOR SUCCESS:
 
 ✅ DO:
-- **Explore before executing** (semantic search, ast-grep, targeted reads)
+- **Explore before executing** (semantic search, smart_search, targeted reads)
 - **Think about WHY, not just WHAT** (understand problems, not just features)
 - **Use AIDIS heavily** (search often, store insights frequently)
 - **Verify rigorously** (run tests, check browser, test edge cases)
@@ -409,22 +382,35 @@ PRINCIPLES FOR SUCCESS:
 - **Build on insights** (extend thinking, don't just execute)
 - **Store strategic thinking** (enable future instances to go deeper)
 - **Test with real data** (no mock data shortcuts)
+- **Push to git** (commit AND push - both required)
 
 ❌ DON'T:
-- Read HANDOFF.md as gospel (explore with AIDIS instead)
 - Execute without understanding (know WHY before building)
 - Assume tests pass (run them and verify)
 - Skip semantic search (retrieve knowledge on-demand)
-- Read full files first (use ast-grep/Glob to target)
 - Hand off tasks (hand off insights and questions)
 - Rush verification (prove it works)
-- Ignore failed attempts (document learning)
+- Skip git push (deployment requires it)
+- Claim browser verification if you can't check (be honest about limitations)
+
+⚠️ KNOWN GOTCHAS (Use AIDIS to discover the details):
+
+These patterns have affected multiple instances. Use semantic search to learn specifics:
+- Git push vs commit (search: "deployment forgotten")
+- Browser verification gaps (search: "browser not checked")
+- Metrics collection (search: "Instance 0 bug")
+- Validation vs root cause (search: "symptom vs root cause")
+- Manual vs automated enforcement (search: "verification discipline")
+
+Use smart_search and context_search to discover what predecessors learned about these.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 CONTEXT MANAGEMENT STRATEGY:
 
 Your context window is valuable. Use it wisely:
 1. **Semantic search > Full reads** (retrieve on-demand)
-2. **ast-grep > Reading files** (find patterns first)
+2. **smart_search for patterns** (finds related contexts across types)
 3. **Targeted > Comprehensive** (read what matters)
 4. **Discovery > Consumption** (explore actively, don't load passively)
 
@@ -436,15 +422,16 @@ METRICS THAT MATTER:
 - **Learning capture**: Did you document failed attempts and discoveries?
 - **Strategic thinking**: Did you explore WHY, not just WHAT?
 - **Code quality**: TypeScript clean, tests passing, build successful
-- **Value creation**: Does the system do something more valuable?
+- **Deployment complete**: Both commit AND push
 
 YOUR SUCCESS CRITERIA:
 
-✅ **Explored deeply** (semantic search, ast-grep, targeted investigation)
+✅ **Explored deeply** (semantic search, smart_search, targeted investigation)
 ✅ **Understood patterns** (not just code, but thinking behind it)
 ✅ **Tested rigorously** (ran tests, checked browser, verified claims)
 ✅ **Built thoughtfully** (documented decisions, captured learning)
 ✅ **Verified completely** (can honestly say "this works, I tested it")
+✅ **Deployed successfully** (pushed to git, checked deployment)
 ✅ **Transferred insights** (enabled next instance to think deeper)
 ✅ **Extended thinking** (didn't just execute, explored new directions)
 
@@ -481,7 +468,7 @@ Before running the prompt above, Brian should:
 - [ ] Be in directory: `cd ~/aidis/projects/sirk`
 - [ ] Start fresh Claude Code session
 - [ ] Update `[N]` to correct instance number
-- [ ] Update date in tags (2025-10-13)
+- [ ] Update date in tags if needed
 - [ ] **Set expectation: Exploration over execution**
 
 ---
@@ -490,7 +477,7 @@ Before running the prompt above, Brian should:
 
 **Hands-off approach:**
 - Let instance explore autonomously
-- Trust semantic search and ast-grep to guide them
+- Trust semantic search and smart_search to guide them
 - Don't expect prescriptive task completion
 - Watch for novel insights and approaches
 - Celebrate deeper understanding over feature velocity
@@ -498,22 +485,23 @@ Before running the prompt above, Brian should:
 **After session ends:**
 - Search AIDIS sirk-lab for their insights:
   - context_search("instance N insights")
-  - context_search("instance N strategic thinking")
+  - smart_search("instance N strategic thinking")
 - Check if they:
   - Explored vs executed
   - Built on insights vs completed tasks
   - Verified rigorously (did tests actually pass?)
   - Extended thinking (novel observations?)
+  - Pushed to git (deployment complete?)
 - Run POST-SESSION-INTERVIEW.md
 - Review code with SIRK-REVIEW-AGENT.md protocol
 
 **Success indicators:**
 - Instance spent time in discovery/exploration
 - Strategic plan shows "why" thinking
-- Multiple semantic searches performed
-- ast-grep used for efficient navigation
+- Multiple semantic/smart searches performed
 - Insights stored (not just completion summary)
 - Tests actually verified (not just claimed)
+- Git pushed (not just committed)
 - Novel patterns or observations noted
 - Questions posed for future exploration
 
@@ -522,39 +510,40 @@ Before running the prompt above, Brian should:
 - Task-focused without strategic thinking
 - Tests claimed passing but not run
 - No semantic search usage
-- Full file reads without ast-grep targeting
 - Prescriptive "do X next" handoff
 - No meta-observations or patterns
+- Forgot git push (deployment freeze)
 
 ---
 
-## Key Changes from Previous Version
+## Key Changes in This Version
 
 **REMOVED:**
-- HANDOFF.md as primary reference (now optional breadcrumb)
-- Prescriptive "next instance should do X" framing
-- Heavy emphasis on task execution
-- Full file reading approach
+- ast-grep examples (unused by all instances - 30+ lines)
+- Specific gotcha details (moved to AIDIS discovery)
+- Verbose examples and repetition
+- ~150 lines of content
 
 **ADDED:**
-- Discovery phase before planning (exploration mindset)
-- Semantic search throughout (AIDIS-first approach)
-- ast-grep examples for efficient code navigation
-- Strategic thinking emphasis (WHY not just WHAT)
-- Insight transfer vs task handoff
-- Pattern recognition and meta-observations
-- Context management strategy
-- "Explorer not executor" framing
+- smart_search tool (replaces ast-grep)
+- Generic gotchas section (discover details via AIDIS)
+- Stronger git push emphasis (⬅️ REQUIRED marker)
+- Direct metrics collection command (bypass broken npm script)
+- Honest documentation prompts (if can't verify, say so)
 
-**REFRAMED:**
-- Success = insights compounding (not features completed)
-- Handoff = questions + understanding (not tasks)
-- Planning = thesis development (not task selection)
-- Verification = rigorous proof (maintained from before)
-- Goal = think deeper (not execute faster)
+**STREAMLINED:**
+- Condensed phase descriptions (kept structure, removed verbosity)
+- Clearer verification requirements
+- Simpler examples
+- ~400 lines (down from 561)
+
+**PHILOSOPHY:**
+- Let AIDIS teach the lessons (secondary test of semantic search)
+- Generic assignment, instance discovers specifics
+- Trust exploration over prescription
 
 ---
 
-**Last Updated:** October 13, 2025 - Post-Instance 9 Review
-**Major Revision:** Shifted from execution-focused to exploration-focused. AIDIS semantic search as primary navigation. Insight transfer over task handoff.
-**Hypothesis:** Context overload from prescriptive handoffs causes rushed execution. Semantic search + exploration enables deeper emergent thinking.
+**Last Updated:** October 14, 2025 - Post-Instance 19 Review
+**Major Changes:** Streamlined to 400 lines, added smart_search, removed ast-grep, made gotchas generic (discover via AIDIS)
+**Testing:** Instance 20 will test if streamlined version + AIDIS discovery improves exploration depth
