@@ -339,9 +339,16 @@ function saveMetrics(metrics: Metrics): string {
 }
 
 /**
- * Prompt for outcome-oriented metrics (Instance 22 validation experiment)
+ * Prompt for outcome-oriented metrics (Instance 23: Objective measurement)
+ *
+ * Instance 23 Change: Use automated verification data instead of self-reported prompts
+ * Prevents measurement bias and Heisenberg effects
  */
-async function promptOutcomeMetrics(): Promise<{
+async function promptOutcomeMetrics(
+  testResult: { total: number; passing: number; failing: number },
+  typescript_errors: number,
+  buildResult: { success: boolean; bundleSizeKb: number | null; buildTimeMs: number | null }
+): Promise<{
   exploration_time_minutes: number;
   verification_completeness: {
     tests_ran: boolean;
@@ -364,18 +371,27 @@ async function promptOutcomeMetrics(): Promise<{
     return new Promise(resolve => rl.question(query, resolve));
   };
 
-  console.log('\n📋 OUTCOME-ORIENTED METRICS (Instance 22 Validation Experiment)\n');
-  console.log('Testing Instance 21\'s hypothesis: Do these metrics distinguish gold standards?\n');
+  console.log('\n📋 OUTCOME-ORIENTED METRICS (Instance 23: Objective Measurement)\n');
+  console.log('Instance 23 Change: Automated verification replaces self-reported prompts\n');
 
-  // Exploration time
+  // Exploration time (still self-reported for now - Phase 2 will objectify this)
   const explorationAnswer = await question('How many minutes did you spend in EXPLORATION/DISCOVERY phase? (e.g., 90): ');
   const exploration_time_minutes = parseInt(explorationAnswer) || 0;
 
-  // Verification completeness
-  console.log('\n✅ VERIFICATION COMPLETENESS (Answer yes/no for each):');
-  const tests_ran = (await question('  Did you run the test suite? (yes/no): ')).toLowerCase().startsWith('y');
-  const typecheck_ran = (await question('  Did you run TypeScript type checking? (yes/no): ')).toLowerCase().startsWith('y');
-  const build_ran = (await question('  Did you run the production build? (yes/no): ')).toLowerCase().startsWith('y');
+  // Verification completeness - OBJECTIVE DATA (Instance 23 improvement)
+  console.log('\n✅ VERIFICATION COMPLETENESS (Automated detection):');
+
+  // Use automated results instead of prompts (prevents bias!)
+  const tests_ran = testResult.total > 0;  // If tests ran, total > 0
+  const typecheck_ran = typescript_errors !== -1;  // If tsc ran, errors != -1 (-1 = not run)
+  const build_ran = buildResult.success !== undefined;  // If build attempted, success is defined
+
+  console.log(`  ✓ Tests ran: ${tests_ran ? 'YES' : 'NO'} (${testResult.passing}/${testResult.total} passing)`);
+  console.log(`  ✓ TypeScript checked: ${typecheck_ran ? 'YES' : 'NO'} (${typescript_errors >= 0 ? typescript_errors + ' errors' : 'not run'})`);
+  console.log(`  ✓ Build ran: ${build_ran ? 'YES' : 'NO'} (${buildResult.success ? 'success' : 'failed'})`);
+
+  // Manual verification steps (cannot automate in terminal environment)
+  console.log('\nManual verification (answer yes/no):');
   const browser_verified = (await question('  Did you open and verify in browser? (yes/no): ')).toLowerCase().startsWith('y');
   const deployment_verified = (await question('  Did you verify deployed site? (yes/no): ')).toLowerCase().startsWith('y');
   const edge_cases_tested = (await question('  Did you test edge cases/error scenarios? (yes/no): ')).toLowerCase().startsWith('y');
@@ -487,8 +503,19 @@ async function main() {
   try {
     const metrics = await collectMetrics(instanceNumber, instanceName);
 
-    // Instance 22: Prompt for outcome-oriented metrics (validation experiment)
-    const outcomeMetrics = await promptOutcomeMetrics();
+    // Instance 23: Pass automated data to prevent self-reported bias
+    const testResult = {
+      total: metrics.tests.total,
+      passing: metrics.tests.passing,
+      failing: metrics.tests.failing
+    };
+    const buildResult = {
+      success: metrics.build_success,
+      bundleSizeKb: metrics.bundle_size_kb,
+      buildTimeMs: metrics.build_time_ms
+    };
+
+    const outcomeMetrics = await promptOutcomeMetrics(testResult, metrics.typescript_errors, buildResult);
     const metricsWithOutcome = {
       ...metrics,
       ...outcomeMetrics
