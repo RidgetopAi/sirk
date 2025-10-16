@@ -343,11 +343,14 @@ function saveMetrics(metrics: Metrics): string {
  *
  * Instance 23 Change: Use automated verification data instead of self-reported prompts
  * Prevents measurement bias and Heisenberg effects
+ * 
+ * Instance 26 Enhancement: Non-interactive mode for CI/fast models
  */
 async function promptOutcomeMetrics(
   testResult: { total: number; passing: number; failing: number },
   typescript_errors: number,
-  buildResult: { success: boolean; bundleSizeKb: number | null; buildTimeMs: number | null }
+  buildResult: { success: boolean; bundleSizeKb: number | null; buildTimeMs: number | null },
+  options?: { nonInteractive?: boolean }
 ): Promise<{
   exploration_time_minutes: number;
   verification_completeness: {
@@ -362,6 +365,32 @@ async function promptOutcomeMetrics(
   fix_type: 'symptom_fix' | 'root_cause_fix' | 'systemic_fix' | 'defense_in_depth' | 'none';
   blind_spot_prediction: string;
 }> {
+  const nonInteractive = options?.nonInteractive || false;
+  
+  // Non-interactive mode: return automated defaults (Instance 26 - CI compatibility)
+  if (nonInteractive) {
+    console.log('\n📋 OUTCOME METRICS (Non-Interactive Mode)\n');
+    const tests_ran = testResult.total > 0;
+    const typecheck_ran = typescript_errors !== -1;
+    const build_ran = buildResult.success !== undefined;
+    
+    return {
+      exploration_time_minutes: 0,
+      verification_completeness: {
+        tests_ran,
+        typecheck_ran,
+        build_ran,
+        browser_verified: false,
+        deployment_verified: false,
+        edge_cases_tested: false,
+        git_push_verified: false
+      },
+      fix_type: 'none',
+      blind_spot_prediction: 'CI-mode: automated collection'
+    };
+  }
+
+  // Interactive mode (original behavior)
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -473,13 +502,17 @@ async function main() {
   // Parse command line arguments
   const args = process.argv.slice(2);
 
+  // Instance 26: Check for --ci flag or METRICS_CI env var (non-interactive mode)
+  const nonInteractive = args.includes('--ci') || process.env.METRICS_CI === '1';
+  
   // Require instance number argument (root cause fix - don't default to 0)
-  if (!args[0]) {
+  if (!args[0] || args[0] === '--ci') {
     console.error('\n❌ ERROR: Instance number required.\n');
     console.error('Usage:');
-    console.error('  npx tsx scripts/collect-metrics.ts <instance_number> <instance_name>');
+    console.error('  npx tsx scripts/collect-metrics.ts <instance_number> <instance_name> [--ci]');
     console.error('\nExample:');
-    console.error('  npx tsx scripts/collect-metrics.ts 20 "Instance 20"\n');
+    console.error('  npx tsx scripts/collect-metrics.ts 20 "Instance 20"');
+    console.error('  npx tsx scripts/collect-metrics.ts 20 "Instance 20" --ci  # Non-interactive mode\n');
     process.exit(1);
   }
 
@@ -490,7 +523,7 @@ async function main() {
   if (instanceNumber === 0 || isNaN(instanceNumber)) {
     console.error('\n❌ ERROR: Instance 0 is reserved for baseline metrics only.\n');
     console.error('Usage:');
-    console.error('  npx tsx scripts/collect-metrics.ts <instance_number> <instance_name>');
+    console.error('  npx tsx scripts/collect-metrics.ts <instance_number> <instance_name> [--ci]');
     console.error('\nExample:');
     console.error('  npx tsx scripts/collect-metrics.ts 20 "Instance 20"\n');
     process.exit(1);
@@ -498,7 +531,9 @@ async function main() {
 
   console.log('🔬 SIRK Metrics Collection\n');
   console.log(`Instance: ${instanceName}`);
-  console.log(`Iteration: ${instanceNumber}\n`);
+  console.log(`Iteration: ${instanceNumber}`);
+  if (nonInteractive) console.log('Mode: Non-Interactive (--ci)\n');
+  console.log();
 
   try {
     const metrics = await collectMetrics(instanceNumber, instanceName);
@@ -515,7 +550,8 @@ async function main() {
       buildTimeMs: metrics.build_time_ms
     };
 
-    const outcomeMetrics = await promptOutcomeMetrics(testResult, metrics.typescript_errors, buildResult);
+    // Instance 26: Pass nonInteractive flag to promptOutcomeMetrics
+    const outcomeMetrics = await promptOutcomeMetrics(testResult, metrics.typescript_errors, buildResult, { nonInteractive });
     const metricsWithOutcome = {
       ...metrics,
       ...outcomeMetrics
