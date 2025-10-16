@@ -1,7 +1,6 @@
-60
+90
 y
-y
-y
-y
-3
-Implementing enforcement automation to break Infrastructure Builder's Blind Spot pattern.
+n
+n
+root_cause_fix
+Instance 27 might see automated browser check as sufficient but miss CONTEXTUAL factors (WHY verification skipped - terminal limitation, time pressure, conscious choice). Pattern analysis identifies correlations not causation.

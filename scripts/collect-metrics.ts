@@ -505,14 +505,18 @@ async function main() {
   // Instance 26: Check for --ci flag or METRICS_CI env var (non-interactive mode)
   const nonInteractive = args.includes('--ci') || process.env.METRICS_CI === '1';
   
+  // Instance 27: Check for --verify-browser flag (objective browser verification)
+  const doBrowserVerification = args.includes('--verify-browser');
+  
   // Require instance number argument (root cause fix - don't default to 0)
   if (!args[0] || args[0] === '--ci') {
     console.error('\n❌ ERROR: Instance number required.\n');
     console.error('Usage:');
-    console.error('  npx tsx scripts/collect-metrics.ts <instance_number> <instance_name> [--ci]');
+    console.error('  npx tsx scripts/collect-metrics.ts <instance_number> <instance_name> [--ci] [--verify-browser]');
     console.error('\nExample:');
     console.error('  npx tsx scripts/collect-metrics.ts 20 "Instance 20"');
-    console.error('  npx tsx scripts/collect-metrics.ts 20 "Instance 20" --ci  # Non-interactive mode\n');
+    console.error('  npx tsx scripts/collect-metrics.ts 20 "Instance 20" --ci  # Non-interactive mode');
+    console.error('  npx tsx scripts/collect-metrics.ts 20 "Instance 20" --verify-browser  # With objective browser check\n');
     process.exit(1);
   }
 
@@ -550,8 +554,28 @@ async function main() {
       buildTimeMs: metrics.build_time_ms
     };
 
+    // Instance 27: Run browser verification if --verify-browser flag present
+    let browserVerified = false;
+    if (doBrowserVerification) {
+      console.log('\n🌐 Running browser verification (--verify-browser flag detected)...\n');
+      try {
+        execSync(`npx tsx scripts/verify-browser.ts ${instanceNumber}`, { stdio: 'inherit' });
+        browserVerified = true;
+        console.log('\n✅ Browser verification PASSED\n');
+      } catch (error) {
+        browserVerified = false;
+        console.log('\n❌ Browser verification FAILED\n');
+      }
+    }
+
     // Instance 26: Pass nonInteractive flag to promptOutcomeMetrics
     const outcomeMetrics = await promptOutcomeMetrics(testResult, metrics.typescript_errors, buildResult, { nonInteractive });
+    
+    // Instance 27: Override browser_verified with objective result if flag was used
+    if (doBrowserVerification) {
+      outcomeMetrics.verification_completeness.browser_verified = browserVerified;
+    }
+    
     const metricsWithOutcome = {
       ...metrics,
       ...outcomeMetrics

@@ -235,6 +235,7 @@ Prove your work actually functions. No assumptions, no hand-waving.
    npm run dev
    → MUST open browser and test EVERY feature you built
    → Click through features, test edge cases, null values, errors
+   → Alternative: npx tsx scripts/verify-browser.ts [N] (automated browser check)
    → If you can't verify browser: DOCUMENT IT HONESTLY (don't claim you did)
 
 **4B. Functional Verification:**
