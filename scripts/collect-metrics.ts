@@ -350,7 +350,7 @@ async function promptOutcomeMetrics(
   testResult: { total: number; passing: number; failing: number },
   typescript_errors: number,
   buildResult: { success: boolean; bundleSizeKb: number | null; buildTimeMs: number | null },
-  options?: { nonInteractive?: boolean }
+  options?: { nonInteractive?: boolean; browserVerified?: boolean }
 ): Promise<{
   exploration_time_minutes: number;
   verification_completeness: {
@@ -365,28 +365,44 @@ async function promptOutcomeMetrics(
   fix_type: 'symptom_fix' | 'root_cause_fix' | 'systemic_fix' | 'defense_in_depth' | 'none';
   blind_spot_prediction: string;
 }> {
-  const nonInteractive = options?.nonInteractive || false;
+  // Instance 28: Enhanced TTY detection - detect piped/redirected stdin automatically
+  const isNonInteractive = options?.nonInteractive || !process.stdin.isTTY || process.env.CI === '1';
   
-  // Non-interactive mode: return automated defaults (Instance 26 - CI compatibility)
-  if (nonInteractive) {
-    console.log('\n📋 OUTCOME METRICS (Non-Interactive Mode)\n');
+  // Non-interactive mode: return automated defaults + environment variables (Instance 28 enhancement)
+  if (isNonInteractive) {
+    console.log('\n📋 OUTCOME METRICS (Non-Interactive Mode - Instance 28 TTY Detection)\n');
     const tests_ran = testResult.total > 0;
     const typecheck_ran = typescript_errors !== -1;
     const build_ran = buildResult.success !== undefined;
     
+    // Instance 28: Use environment variables for fields that need input
+    const exploration_time_minutes = parseInt(process.env.EXPLORATION_TIME || '0');
+    const fix_type_env = process.env.FIX_TYPE || 'none';
+    const blind_spot = process.env.BLIND_SPOT || 'Non-interactive collection';
+    
+    // Use browser verification result if available from options
+    const browser_verified = options?.browserVerified || false;
+    
+    console.log(`  ✓ Tests ran: ${tests_ran ? 'YES' : 'NO'} (${testResult.passing}/${testResult.total} passing)`);
+    console.log(`  ✓ TypeScript checked: ${typecheck_ran ? 'YES' : 'NO'} (${typescript_errors >= 0 ? typescript_errors + ' errors' : 'not run'})`);
+    console.log(`  ✓ Build ran: ${build_ran ? 'YES' : 'NO'} (${buildResult.success ? 'success' : 'failed'})`);
+    console.log(`  ✓ Browser verified: ${browser_verified ? 'YES' : 'NO'} (${browser_verified ? 'from --verify-browser' : 'skipped'})`);
+    console.log(`  ✓ Exploration time: ${exploration_time_minutes} min (from EXPLORATION_TIME env)`);
+    console.log('\n  Manual fields default to false (cannot verify in non-interactive mode)\n');
+    
     return {
-      exploration_time_minutes: 0,
+      exploration_time_minutes,
       verification_completeness: {
         tests_ran,
         typecheck_ran,
         build_ran,
-        browser_verified: false,
-        deployment_verified: false,
-        edge_cases_tested: false,
-        git_push_verified: false
+        browser_verified,
+        deployment_verified: false,  // Cannot auto-verify
+        edge_cases_tested: false,    // Cannot auto-verify  
+        git_push_verified: false     // Post-collection check
       },
-      fix_type: 'none',
-      blind_spot_prediction: 'CI-mode: automated collection'
+      fix_type: (fix_type_env as any) || 'none',
+      blind_spot_prediction: blind_spot
     };
   }
 
@@ -569,10 +585,14 @@ async function main() {
     }
 
     // Instance 26: Pass nonInteractive flag to promptOutcomeMetrics
-    const outcomeMetrics = await promptOutcomeMetrics(testResult, metrics.typescript_errors, buildResult, { nonInteractive });
+    // Instance 28: Also pass browserVerified result for non-interactive mode
+    const outcomeMetrics = await promptOutcomeMetrics(testResult, metrics.typescript_errors, buildResult, { 
+      nonInteractive,
+      browserVerified 
+    });
     
-    // Instance 27: Override browser_verified with objective result if flag was used
-    if (doBrowserVerification) {
+    // Instance 27: Override browser_verified with objective result if flag was used (interactive mode only)
+    if (doBrowserVerification && !nonInteractive) {
       outcomeMetrics.verification_completeness.browser_verified = browserVerified;
     }
     
