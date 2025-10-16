@@ -1,0 +1,48 @@
+{
+  "iteration": 29,
+  "instance": "Instance 29",
+  "timestamp": "2025-10-16T23:45:36.140Z",
+  "date": "2025-10-16",
+  "loc": {
+    "total": 2706,
+    "src": 1244,
+    "scripts": 1440,
+    "tests": 0
+  },
+  "files": {
+    "total": 84,
+    "typescript": 16,
+    "javascript": 0,
+    "markdown": 21
+  },
+  "typescript_errors": 0,
+  "build_success": true,
+  "build_time_ms": 1640,
+  "tests": {
+    "total": 20,
+    "passing": 20,
+    "failing": 0,
+    "coverage_percent": null
+  },
+  "git": {
+    "commits": 38,
+    "files_changed_this_iteration": 1,
+    "lines_added_this_iteration": 229,
+    "lines_deleted_this_iteration": 0
+  },
+  "deployment_url": null,
+  "bundle_size_kb": 329.89,
+  "lighthouse_score": null,
+  "exploration_time_minutes": 90,
+  "verification_completeness": {
+    "tests_ran": true,
+    "typecheck_ran": true,
+    "build_ran": true,
+    "browser_verified": false,
+    "deployment_verified": false,
+    "edge_cases_tested": false,
+    "git_push_verified": false
+  },
+  "fix_type": "root_cause_fix",
+  "blind_spot_prediction": "Instance 30 might notice whether shell wrapper drives adoption better than manual env vars, and whether automation needs documentation/discoverability not just better tools"
+}
