@@ -522,6 +522,23 @@ async function main() {
     };
 
     const filepath = saveMetrics(metricsWithOutcome);
+
+    // ENFORCEMENT: Infrastructure Builder's Blind Spot Prevention
+    // Verify that metrics file was created for this instance
+    const metricsFiles = fs.readdirSync('metrics').filter(file =>
+      file.match(new RegExp(`instance_${instanceNumber}_\\d+\\.json`))
+    );
+
+    if (metricsFiles.length === 0) {
+      console.error('\n❌ ENFORCEMENT: No metrics file created for current instance!');
+      console.error(`Expected pattern: metrics/instance_${instanceNumber}_*.json`);
+      console.error('You built/modified metrics infrastructure but didn\'t use it to collect metrics.');
+      console.error('This is \"Infrastructure Builder\'s Blind Spot\" (Instance 11, 23 pattern).');
+      process.exit(1);
+    }
+
+    console.log('✅ ENFORCEMENT: Metrics file verified for current instance.');
+
     displaySummary(metricsWithOutcome);
 
     console.log('✨ Metrics collection complete!\n');

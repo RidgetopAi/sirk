@@ -1,0 +1,7 @@
+60
+y
+y
+y
+y
+3
+Implementing enforcement automation to break Infrastructure Builder's Blind Spot pattern.
