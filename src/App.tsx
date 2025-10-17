@@ -5,7 +5,7 @@ function App() {
   return (
     <div className="App">
       <header>
-        <h1>Brian Dashboard</h1>
+        <h1>SIRK Dashboard</h1>
         <p className="subtitle">
           Single Instance Recursive Knowledge Experiment
         </p>
