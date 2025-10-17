@@ -86,6 +86,7 @@ echo ""
 export EXPLORATION_TIME="$EXPLORATION_TIME"
 export FIX_TYPE="$FIX_TYPE"
 export BLIND_SPOT="$BLIND_SPOT"
+export BROWSER_VERIFIED="$BROWSER_VERIFIED"  # Instance 31: Fix data flow bug
 
 # Run metrics collection with browser result
 # Note: browser_verified field will be set from environment or default to false

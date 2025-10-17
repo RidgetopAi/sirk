@@ -379,14 +379,14 @@ async function promptOutcomeMetrics(
     const exploration_time_minutes = parseInt(process.env.EXPLORATION_TIME || '0');
     const fix_type_env = process.env.FIX_TYPE || 'none';
     const blind_spot = process.env.BLIND_SPOT || 'Non-interactive collection';
-    
-    // Use browser verification result if available from options
-    const browser_verified = options?.browserVerified || false;
+
+    // Instance 31: Read browser verification from environment (fixes data flow bug)
+    const browser_verified = process.env.BROWSER_VERIFIED === 'true' || options?.browserVerified || false;
     
     console.log(`  ✓ Tests ran: ${tests_ran ? 'YES' : 'NO'} (${testResult.passing}/${testResult.total} passing)`);
     console.log(`  ✓ TypeScript checked: ${typecheck_ran ? 'YES' : 'NO'} (${typescript_errors >= 0 ? typescript_errors + ' errors' : 'not run'})`);
     console.log(`  ✓ Build ran: ${build_ran ? 'YES' : 'NO'} (${buildResult.success ? 'success' : 'failed'})`);
-    console.log(`  ✓ Browser verified: ${browser_verified ? 'YES' : 'NO'} (${browser_verified ? 'from --verify-browser' : 'skipped'})`);
+    console.log(`  ✓ Browser verified: ${browser_verified ? 'YES' : 'NO'} (${process.env.BROWSER_VERIFIED ? `from env: ${process.env.BROWSER_VERIFIED}` : 'skipped'})`);
     console.log(`  ✓ Exploration time: ${exploration_time_minutes} min (from EXPLORATION_TIME env)`);
     console.log('\n  Manual fields default to false (cannot verify in non-interactive mode)\n');
     
