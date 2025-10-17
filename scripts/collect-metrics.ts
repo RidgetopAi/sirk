@@ -76,6 +76,15 @@ interface Metrics {
   };
   fix_type?: 'symptom_fix' | 'root_cause_fix' | 'systemic_fix' | 'defense_in_depth' | 'none';
   blind_spot_prediction?: string;
+  
+  // Instance 33: Meta-Learning Metrics
+  // Measures epistemic humility as predictor of compounding value
+  epistemic_humility?: {
+    blind_spot_predicted: boolean;      // Did you predict your own blind spot?
+    confidence_stated: boolean;          // Did you state confidence levels?
+    limitations_acknowledged: boolean;   // Did you acknowledge what you didn't do?
+    humility_score: number;             // 0-3 (sum of above, gold standard >= 2)
+  };
 }
 
 /**
@@ -461,7 +470,15 @@ async function promptOutcomeMetrics(
 
   // Blind spot prediction
   console.log('\n🔮 BLIND SPOT PREDICTION (Epistemic humility):');
-  const blind_spot_prediction = await question('  What might Instance 23 see that you can\'t? (1-2 sentences): ');
+  const blind_spot_prediction = await question('  What might Instance N+1 see that you can\'t? (1-2 sentences): ');
+
+  // Instance 33: Epistemic Humility Index
+  console.log('\n📊 EPISTEMIC HUMILITY INDEX (Meta-learning metric):');
+  const blind_spot_predicted = blind_spot_prediction.trim().length > 0;
+  const confidence_stated_answer = (await question('  Did you state confidence levels in your work? (yes/no): ')).toLowerCase().startsWith('y');
+  const limitations_acknowledged_answer = (await question('  Did you acknowledge what you didn\'t do/test? (yes/no): ')).toLowerCase().startsWith('y');
+  
+  const humility_score = (blind_spot_predicted ? 1 : 0) + (confidence_stated_answer ? 1 : 0) + (limitations_acknowledged_answer ? 1 : 0);
 
   rl.close();
 
@@ -477,7 +494,13 @@ async function promptOutcomeMetrics(
       git_push_verified
     },
     fix_type,
-    blind_spot_prediction: blind_spot_prediction.trim()
+    blind_spot_prediction: blind_spot_prediction.trim(),
+    epistemic_humility: {
+      blind_spot_predicted,
+      confidence_stated: confidence_stated_answer,
+      limitations_acknowledged: limitations_acknowledged_answer,
+      humility_score
+    }
   };
 }
 

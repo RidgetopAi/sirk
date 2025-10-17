@@ -1,0 +1,12 @@
+180
+yes
+yes
+yes
+no
+no
+no
+yes
+5
+Instance 34 might see that Instance 33's focused demonstration (one canonical lesson) might not generalize when scaling to 216 lessons. Citation extraction could be harder than framework suggests, or failure vs success distinction could be ambiguous for most lessons.
+yes
+yes
