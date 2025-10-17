@@ -1,12 +1,14 @@
-import './App.css'
-import MetricsDashboard from './components/MetricsDashboard'
+import "./App.css";
+import MetricsDashboard from "./components/MetricsDashboard";
 
 function App() {
   return (
     <div className="App">
       <header>
-        <h1>SIRK Dashboard</h1>
-        <p className="subtitle">Single Instance Recursive Knowledge Experiment</p>
+        <h1>Brian Dashboard</h1>
+        <p className="subtitle">
+          Single Instance Recursive Knowledge Experiment
+        </p>
       </header>
 
       <main>
@@ -20,7 +22,7 @@ function App() {
         </p>
       </footer>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
