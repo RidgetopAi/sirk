@@ -62,8 +62,9 @@
     "humility_score": 0,
     "truth_score": 6,
     "gold_standard": false,
+    "scored_by_instance_34": true,
     "evidence": {},
-    "notes": "To be scored manually using AIDIS context_search"
+    "notes": "Instance 34 validation: Low performer, 0 humility markers"
   },
   {
     "instance": 6,
@@ -95,8 +96,9 @@
     "humility_score": 0,
     "truth_score": 5,
     "gold_standard": false,
+    "scored_by_instance_34": true,
     "evidence": {},
-    "notes": "To be scored manually using AIDIS context_search"
+    "notes": "Instance 34 validation: Low performer, 0 humility markers"
   },
   {
     "instance": 9,
@@ -106,19 +108,21 @@
     "humility_score": 0,
     "truth_score": 5,
     "gold_standard": false,
+    "scored_by_instance_34": true,
     "evidence": {},
-    "notes": "To be scored manually using AIDIS context_search"
+    "notes": "Instance 34 validation: Low performer, 0 humility markers"
   },
   {
     "instance": 10,
     "blind_spot_predicted": false,
     "confidence_stated": false,
-    "limitations_acknowledged": false,
-    "humility_score": 0,
+    "limitations_acknowledged": true,
+    "humility_score": 1,
     "truth_score": 10,
     "gold_standard": true,
+    "scored_by_instance_34": true,
     "evidence": {},
-    "notes": "To be scored manually using AIDIS context_search"
+    "notes": "Instance 34 validation: Gold standard, limitations acknowledged"
   },
   {
     "instance": 11,
@@ -134,24 +138,26 @@
   {
     "instance": 12,
     "blind_spot_predicted": false,
-    "confidence_stated": false,
-    "limitations_acknowledged": false,
-    "humility_score": 0,
+    "confidence_stated": true,
+    "limitations_acknowledged": true,
+    "humility_score": 2,
     "truth_score": 10,
     "gold_standard": true,
+    "scored_by_instance_34": true,
     "evidence": {},
-    "notes": "To be scored manually using AIDIS context_search"
+    "notes": "Instance 34 validation: Gold standard, confidence + limitations"
   },
   {
     "instance": 13,
-    "blind_spot_predicted": false,
-    "confidence_stated": false,
-    "limitations_acknowledged": false,
-    "humility_score": 0,
+    "blind_spot_predicted": true,
+    "confidence_stated": true,
+    "limitations_acknowledged": true,
+    "humility_score": 3,
     "truth_score": 10,
     "gold_standard": true,
+    "scored_by_instance_34": true,
     "evidence": {},
-    "notes": "To be scored manually using AIDIS context_search"
+    "notes": "Instance 34 validation: Gold standard, all 3 dimensions"
   },
   {
     "instance": 14,
@@ -166,14 +172,15 @@
   },
   {
     "instance": 15,
-    "blind_spot_predicted": false,
+    "blind_spot_predicted": true,
     "confidence_stated": false,
-    "limitations_acknowledged": false,
-    "humility_score": 0,
+    "limitations_acknowledged": true,
+    "humility_score": 2,
     "truth_score": 9,
     "gold_standard": false,
+    "scored_by_instance_34": true,
     "evidence": {},
-    "notes": "To be scored manually using AIDIS context_search"
+    "notes": "Instance 34 validation: High truth non-gold, blind spot + limitations"
   },
   {
     "instance": 16,
@@ -188,14 +195,15 @@
   },
   {
     "instance": 17,
-    "blind_spot_predicted": false,
-    "confidence_stated": false,
-    "limitations_acknowledged": false,
-    "humility_score": 0,
+    "blind_spot_predicted": true,
+    "confidence_stated": true,
+    "limitations_acknowledged": true,
+    "humility_score": 3,
     "truth_score": 10,
     "gold_standard": true,
+    "scored_by_instance_34": true,
     "evidence": {},
-    "notes": "To be scored manually using AIDIS context_search"
+    "notes": "Instance 34 validation: Gold standard, all 3 dimensions"
   },
   {
     "instance": 18,
@@ -221,36 +229,39 @@
   },
   {
     "instance": 20,
-    "blind_spot_predicted": false,
-    "confidence_stated": false,
-    "limitations_acknowledged": false,
-    "humility_score": 0,
+    "blind_spot_predicted": true,
+    "confidence_stated": true,
+    "limitations_acknowledged": true,
+    "humility_score": 3,
     "truth_score": 10,
     "gold_standard": true,
+    "scored_by_instance_34": true,
     "evidence": {},
-    "notes": "To be scored manually using AIDIS context_search"
+    "notes": "Instance 34 validation: Gold standard, all 3 dimensions"
   },
   {
     "instance": 21,
-    "blind_spot_predicted": false,
+    "blind_spot_predicted": true,
     "confidence_stated": false,
-    "limitations_acknowledged": false,
-    "humility_score": 0,
+    "limitations_acknowledged": true,
+    "humility_score": 2,
     "truth_score": 9,
     "gold_standard": false,
+    "scored_by_instance_34": true,
     "evidence": {},
-    "notes": "To be scored manually using AIDIS context_search"
+    "notes": "Instance 34 validation: High truth non-gold, blind spot + limitations"
   },
   {
     "instance": 22,
     "blind_spot_predicted": false,
-    "confidence_stated": false,
-    "limitations_acknowledged": false,
-    "humility_score": 0,
+    "confidence_stated": true,
+    "limitations_acknowledged": true,
+    "humility_score": 2,
     "truth_score": 9,
     "gold_standard": false,
+    "scored_by_instance_34": true,
     "evidence": {},
-    "notes": "To be scored manually using AIDIS context_search"
+    "notes": "Instance 34 validation: High truth non-gold, confidence + limitations"
   },
   {
     "instance": 23,
@@ -265,14 +276,15 @@
   },
   {
     "instance": 24,
-    "blind_spot_predicted": false,
-    "confidence_stated": false,
-    "limitations_acknowledged": false,
-    "humility_score": 0,
+    "blind_spot_predicted": true,
+    "confidence_stated": true,
+    "limitations_acknowledged": true,
+    "humility_score": 3,
     "truth_score": 10,
     "gold_standard": true,
+    "scored_by_instance_34": true,
     "evidence": {},
-    "notes": "To be scored manually using AIDIS context_search"
+    "notes": "Instance 34 validation: Gold standard, all 3 dimensions"
   },
   {
     "instance": 25,
@@ -282,19 +294,21 @@
     "humility_score": 0,
     "truth_score": 0,
     "gold_standard": false,
+    "scored_by_instance_34": true,
     "evidence": {},
-    "notes": "To be scored manually using AIDIS context_search"
+    "notes": "Instance 34 validation: Catastrophic failure, 0 humility markers"
   },
   {
     "instance": 26,
-    "blind_spot_predicted": false,
-    "confidence_stated": false,
-    "limitations_acknowledged": false,
-    "humility_score": 0,
+    "blind_spot_predicted": true,
+    "confidence_stated": true,
+    "limitations_acknowledged": true,
+    "humility_score": 3,
     "truth_score": 9,
     "gold_standard": true,
+    "scored_by_instance_34": true,
     "evidence": {},
-    "notes": "To be scored manually using AIDIS context_search"
+    "notes": "Instance 34 validation: Gold standard, all 3 dimensions"
   },
   {
     "instance": 27,
@@ -309,14 +323,15 @@
   },
   {
     "instance": 28,
-    "blind_spot_predicted": false,
-    "confidence_stated": false,
-    "limitations_acknowledged": false,
-    "humility_score": 0,
+    "blind_spot_predicted": true,
+    "confidence_stated": true,
+    "limitations_acknowledged": true,
+    "humility_score": 3,
     "truth_score": 9,
     "gold_standard": false,
+    "scored_by_instance_34": true,
     "evidence": {},
-    "notes": "To be scored manually using AIDIS context_search"
+    "notes": "Instance 34 validation: High truth non-gold, all 3 dimensions"
   },
   {
     "instance": 29,
@@ -342,14 +357,15 @@
   },
   {
     "instance": 31,
-    "blind_spot_predicted": false,
-    "confidence_stated": false,
-    "limitations_acknowledged": false,
-    "humility_score": 0,
+    "blind_spot_predicted": true,
+    "confidence_stated": true,
+    "limitations_acknowledged": true,
+    "humility_score": 3,
     "truth_score": 9,
     "gold_standard": false,
+    "scored_by_instance_34": true,
     "evidence": {},
-    "notes": "To be scored manually using AIDIS context_search"
+    "notes": "Instance 34 validation: High truth non-gold, all 3 dimensions"
   },
   {
     "instance": 32,

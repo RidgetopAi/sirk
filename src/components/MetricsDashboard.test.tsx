@@ -63,9 +63,9 @@ describe('MetricsDashboard', () => {
       expect(screen.queryByText(/loading metrics/i)).not.toBeInTheDocument()
     }, { timeout: 3000 })
 
-    // Check that chart containers are present (9 charts - Instance 18 added Session Duration)
+    // Check that chart containers are present (10 charts - Instance 35 added Epistemic Humility)
     const charts = document.querySelectorAll('.chart-container')
-    expect(charts).toHaveLength(9) // LOC, Git, Files, Commits, Build Time, Bundle Size, Test Trends, Success Factors, Session Duration
+    expect(charts).toHaveLength(10) // LOC, Git, Files, Commits, Build Time, Bundle Size, Test Trends, Success Factors, Session Duration, Epistemic Humility
   })
 
   it('displays metrics details grid', async () => {
@@ -118,10 +118,10 @@ describe('MetricsDashboard', () => {
     // Component should render successfully even if some metrics have null values
     // Chart.js handles null values by creating gaps in the chart
     const charts = document.querySelectorAll('.chart-container')
-    expect(charts).toHaveLength(9) // LOC, Git, Files, Commits, Build Time, Bundle Size, Test Trends, Success Factors, Session Duration
+    expect(charts).toHaveLength(10) // LOC, Git, Files, Commits, Build Time, Bundle Size, Test Trends, Success Factors, Session Duration, Epistemic Humility
   })
 
-  it('renders all 8 chart containers with error boundaries', async () => {
+  it('renders all 10 chart containers with error boundaries', async () => {
     render(<MetricsDashboard />)
 
     await waitFor(() => {
@@ -130,7 +130,7 @@ describe('MetricsDashboard', () => {
 
     // Verify all chart containers are wrapped in error boundaries
     const charts = document.querySelectorAll('.chart-container')
-    expect(charts.length).toBe(9) // LOC, Git, Files, Commits, Build Time, Bundle Size, Test Trends, Success Factors, Session Duration
+    expect(charts.length).toBe(10) // LOC, Git, Files, Commits, Build Time, Bundle Size, Test Trends, Success Factors, Session Duration, Epistemic Humility
 
     // Each chart should be a child of the dashboard
     charts.forEach(chart => {

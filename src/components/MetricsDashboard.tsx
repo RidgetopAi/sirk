@@ -14,6 +14,7 @@ import {
 } from 'chart.js'
 import ErrorBoundary from './ErrorBoundary'
 import './MetricsDashboard.css'
+import humilityScores from '../../data/meta/epistemic_humility_scores.json'
 
 // Register Chart.js components
 ChartJS.register(
@@ -68,6 +69,19 @@ interface Metrics {
   }
   truth_score?: number  // From reviews (0-10 scale)
   exploration_time_min?: number  // Approximate exploration time
+}
+
+interface HumilityScore {
+  instance: number
+  blind_spot_predicted: boolean
+  confidence_stated: boolean
+  limitations_acknowledged: boolean
+  humility_score: number
+  truth_score: number
+  gold_standard: boolean
+  scored_by_instance_34?: boolean
+  evidence: Record<string, unknown>
+  notes: string
 }
 
 function MetricsDashboard() {
@@ -639,6 +653,90 @@ function MetricsDashboard() {
     }
   }
 
+  // Epistemic Humility Chart Data (Instance 35 - Instance 34's validation visualized)
+  const humilityChartData = {
+    labels: displayMetrics.map(m => `Instance ${m.iteration}`),
+    datasets: [
+      {
+        label: 'Blind Spot Predicted',
+        data: displayMetrics.map(m => {
+          const humility = humilityScores.find((h: HumilityScore) => h.instance === m.iteration)
+          return humility?.blind_spot_predicted ? 1 : 0
+        }),
+        backgroundColor: 'rgba(156, 39, 176, 0.7)',
+        borderColor: 'rgb(156, 39, 176)',
+        borderWidth: 1,
+        stack: 'humility'
+      },
+      {
+        label: 'Confidence Stated',
+        data: displayMetrics.map(m => {
+          const humility = humilityScores.find((h: HumilityScore) => h.instance === m.iteration)
+          return humility?.confidence_stated ? 1 : 0
+        }),
+        backgroundColor: 'rgba(255, 152, 0, 0.7)',
+        borderColor: 'rgb(255, 152, 0)',
+        borderWidth: 1,
+        stack: 'humility'
+      },
+      {
+        label: 'Limitations Acknowledged',
+        data: displayMetrics.map(m => {
+          const humility = humilityScores.find((h: HumilityScore) => h.instance === m.iteration)
+          return humility?.limitations_acknowledged ? 1 : 0
+        }),
+        backgroundColor: 'rgba(76, 175, 80, 0.7)',
+        borderColor: 'rgb(76, 175, 80)',
+        borderWidth: 1,
+        stack: 'humility'
+      }
+    ]
+  }
+
+  const humilityChartOptions: ChartOptions<'bar'> = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: 'Epistemic Humility Metric (Instance 34 Validation: ≥2 Predicts Success)'
+      },
+      tooltip: {
+        callbacks: {
+          afterLabel: function(context) {
+            const idx = context.dataIndex
+            const m = displayMetrics[idx]
+            const humility = humilityScores.find((h: HumilityScore) => h.instance === m.iteration)
+            if (humility && context.datasetIndex === 0) {
+              return [
+                `Total Score: ${humility.humility_score}/3`,
+                `Truth Score: ${humility.truth_score}/10`,
+                humility.gold_standard ? '⭐ Gold Standard' : '',
+                humility.scored_by_instance_34 ? '✅ Instance 34 validated' : '⏳ Not yet scored'
+              ].filter(Boolean)
+            }
+            return ''
+          }
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        max: 3,
+        ticks: {
+          stepSize: 1
+        },
+        title: {
+          display: true,
+          text: 'Humility Score (0-3)'
+        }
+      }
+    }
+  }
+
   const latestMetrics = displayMetrics[displayMetrics.length - 1]
 
   return (
@@ -786,6 +884,12 @@ function MetricsDashboard() {
       <ErrorBoundary fallbackMessage="Unable to render Session Duration chart">
         <div className="chart-container" role="img" aria-label="Line chart showing exploration time in minutes per instance over iterations">
           <Line data={sessionDurationData} options={sessionDurationOptions} />
+        </div>
+      </ErrorBoundary>
+
+      <ErrorBoundary fallbackMessage="Unable to render Epistemic Humility chart">
+        <div className="chart-container" role="img" aria-label="Stacked bar chart showing epistemic humility dimensions: blind spot prediction, confidence statement, and limitations acknowledgment. Instance 34 validated: score ≥2 predicts gold standard instances.">
+          <Bar data={humilityChartData} options={humilityChartOptions} />
         </div>
       </ErrorBoundary>
 
