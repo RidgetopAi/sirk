@@ -703,6 +703,14 @@ function MetricsDashboard() {
         display: true,
         text: 'Epistemic Humility Metric (Instance 34 Validation: ≥2 Predicts Success)'
       },
+      subtitle: {
+        display: true,
+        text: 'Red dashed line shows success threshold at score ≥2',
+        color: '#666',
+        font: {
+          size: 12
+        }
+      },
       tooltip: {
         callbacks: {
           afterLabel: function(context) {
@@ -727,11 +735,34 @@ function MetricsDashboard() {
         beginAtZero: true,
         max: 3,
         ticks: {
-          stepSize: 1
+          stepSize: 1,
+          callback: function(value) {
+            // Highlight threshold at y=2
+            if (value === 2) {
+              return '→ ' + value + ' (Success Threshold)'
+            }
+            return value
+          }
         },
         title: {
           display: true,
           text: 'Humility Score (0-3)'
+        },
+        grid: {
+          color: function(context) {
+            // Make the grid line at y=2 more prominent
+            if (context.tick.value === 2) {
+              return 'rgba(255, 0, 0, 0.4)'  // Red for threshold line
+            }
+            return 'rgba(0, 0, 0, 0.1)'  // Default grid color
+          },
+          lineWidth: function(context) {
+            // Make threshold line thicker
+            if (context.tick.value === 2) {
+              return 2
+            }
+            return 1
+          }
         }
       }
     }
