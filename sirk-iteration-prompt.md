@@ -7,7 +7,7 @@
 ## Startup Prompt for Instance [N]
 
 ```
-You are Instance [N] of the SIRK experiment.
+You are Instance [36] of the SIRK experiment.
 
 SIRK = Single Instance Recursive Knowledge
 Goal: Test whether sequential AI instances can compound improvements through exploration and visualization
@@ -405,17 +405,13 @@ Enable next instance to build on your work.
     - Tests: [X/X passing]
     - TypeScript: [0 errors]
     - Build: [Time, bundle size]
-    - Browser: [Verified/Not verified - be honest]
     - Git: [Committed + Pushed/Just committed]
-    - Deployed: [Yes/No - URL if yes]
 
     ## Known Issues (if any)
     [Specific problems with severity and context]
 
-    ## What Could Be Built On
-    [Validated findings, infrastructure, patterns discovered]",
     type: "completion",
-    tags: ["instance_[N]", "handoff", "verified"]
+    tags: ["amp free", "handoff", "phase [n]"]
   )
 
 **EMPHASIS: AIDIS contexts are the primary handoff mechanism.**
@@ -496,6 +492,7 @@ Think deeply AND show results. 🎯
 ## Quick Start Checklist
 
 Before running the prompt above, Brian should:
+
 - [ ] Be in directory: `cd ~/aidis/projects/sirk`
 - [ ] Start fresh Claude Code session
 - [ ] Update `[N]` to correct instance number
@@ -507,12 +504,14 @@ Before running the prompt above, Brian should:
 ## Notes for Brian
 
 **Hands-off approach:**
+
 - Let instance explore autonomously
 - Trust semantic search and smart_search to guide them
 - Watch for balance: understanding + visualization
 - Celebrate both deep thinking and concrete results
 
 **After session ends:**
+
 - Search AIDIS sirk-lab for their insights:
   - context_search("instance N insights")
   - smart_search("instance N strategic thinking")
@@ -527,6 +526,7 @@ Before running the prompt above, Brian should:
 - Review code with SIRK-REVIEW-AGENT.md protocol
 
 **Success indicators:**
+
 - Instance spent time in discovery/exploration
 - Strategic plan stored in AIDIS (planning context)
 - Multiple semantic/smart searches performed
@@ -539,6 +539,7 @@ Before running the prompt above, Brian should:
 - Built on predecessor's validated work
 
 **Failure indicators:**
+
 - Jumped to execution without discovery
 - Pure meta-analysis without showing results
 - Tests claimed passing but not run
@@ -553,6 +554,7 @@ Before running the prompt above, Brian should:
 ## Key Changes in This Version
 
 **ADDED:**
+
 - PRIMARY DELIVERABLE section (dashboard focus at top)
 - "Show your work" emphasis throughout
 - "Building on predecessors" clarification with examples
@@ -561,6 +563,7 @@ Before running the prompt above, Brian should:
 - Balance exploration + demonstration in success criteria
 
 **KEPT SAME:**
+
 - All AIDIS storage requirements (planning, decisions, insights, completion)
 - Phase structure (6 phases)
 - Semantic search emphasis
@@ -568,12 +571,14 @@ Before running the prompt above, Brian should:
 - Context management strategy
 
 **ADJUSTED:**
+
 - Reduced pure meta-analysis emphasis
 - Added demonstration/visualization focus
 - Clarified "building on each other" means implementing validated findings
 - Made verification honest but fair (terminal limitations OK if documented)
 
 **PHILOSOPHY:**
+
 - Balance deep thinking with visible results
 - AIDIS contexts still primary handoff mechanism
 - Exploration enables better execution

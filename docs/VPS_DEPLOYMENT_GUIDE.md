@@ -32,16 +32,19 @@
 ### Step 2: Initial Server Configuration
 
 SSH into your VPS:
+
 ```bash
 ssh root@YOUR_VPS_IP
 ```
 
 **Update system:**
+
 ```bash
 apt update && apt upgrade -y
 ```
 
 **Install required software:**
+
 ```bash
 # Node.js 20.x (LTS)
 curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
@@ -62,6 +65,7 @@ nginx -v        # Should show nginx/1.24+
 ### Step 3: Create Deployment User
 
 **Create dedicated user for deployments (security best practice):**
+
 ```bash
 # Create user
 adduser sirk
@@ -77,6 +81,7 @@ su - sirk
 ### Step 4: Set Up SSH Keys for GitHub Actions
 
 **On VPS (as sirk user):**
+
 ```bash
 # Generate SSH key for deployment
 ssh-keygen -t ed25519 -C "sirk-deployment" -f ~/.ssh/sirk_deploy
@@ -94,6 +99,7 @@ chmod 600 ~/.ssh/authorized_keys
 ```
 
 **Save these for later:**
+
 - Private key (`~/.ssh/sirk_deploy`) → Goes to GitHub Secrets as `VPS_SSH_KEY`
 - VPS IP address → Goes to GitHub Secrets as `VPS_HOST`
 - Username: `sirk` → Goes to GitHub Secrets as `VPS_USER`
@@ -105,6 +111,7 @@ chmod 600 ~/.ssh/authorized_keys
 ### Step 5: Clone Repository
 
 **On VPS (as sirk user):**
+
 ```bash
 # Navigate to home directory
 cd ~
@@ -121,6 +128,7 @@ npm run build
 ```
 
 **Verify build:**
+
 ```bash
 ls -lh dist/  # Should see index.html, assets/, etc.
 ```
@@ -128,6 +136,7 @@ ls -lh dist/  # Should see index.html, assets/, etc.
 ### Step 6: Configure nginx
 
 **On VPS (as root, exit sirk user first):**
+
 ```bash
 # Exit sirk user
 exit
@@ -137,6 +146,7 @@ nano /etc/nginx/sites-available/sirk
 ```
 
 **Paste this configuration:**
+
 ```nginx
 server {
     listen 80;
@@ -164,6 +174,7 @@ server {
 ```
 
 **Enable site and restart nginx:**
+
 ```bash
 # Create symbolic link
 ln -s /etc/nginx/sites-available/sirk /etc/nginx/sites-enabled/
@@ -180,6 +191,7 @@ systemctl enable nginx
 ```
 
 **Test in browser:**
+
 ```
 http://YOUR_VPS_IP
 ```
@@ -195,7 +207,6 @@ You should see the SIRK dashboard!
 1. **Go to GitHub repository:** https://github.com/RidgetopAi/sirk
 2. **Settings → Secrets and variables → Actions**
 3. **Add these secrets:**
-
    - **Name:** `VPS_HOST`
      **Value:** Your VPS IP address (e.g., `165.227.123.45`)
 
@@ -210,11 +221,13 @@ You should see the SIRK dashboard!
 **On your local machine:**
 
 The workflow file will be created at:
+
 ```
 projects/sirk/.github/workflows/deploy.yml
 ```
 
 This workflow will:
+
 1. Trigger on push to Main branch
 2. SSH into VPS
 3. Pull latest code
@@ -229,6 +242,7 @@ This workflow will:
 ### Step 9: Test Auto-Deployment
 
 **On your local machine:**
+
 ```bash
 cd ~/aidis/projects/sirk
 
@@ -242,11 +256,13 @@ git push origin Main
 ```
 
 **Watch GitHub Actions:**
+
 1. Go to: https://github.com/RidgetopAi/sirk/actions
 2. You should see workflow running
 3. Wait for green checkmark (~30 seconds)
 
 **Verify in browser:**
+
 ```
 http://YOUR_VPS_IP
 ```
@@ -270,26 +286,30 @@ Hard refresh (Ctrl+Shift+R) and verify your change is live!
    git push origin Main
    ```
 
----
+-─--
 
 ## Troubleshooting
 
 ### Deployment fails with SSH error
+
 - Verify `VPS_SSH_KEY` secret contains the entire private key
 - Check `VPS_HOST` and `VPS_USER` are correct
 - Test manual SSH: `ssh -i ~/.ssh/sirk_deploy sirk@YOUR_VPS_IP`
 
 ### nginx shows 404
+
 - Check `dist/` folder exists: `ls /home/sirk/sirk/dist/`
 - Verify nginx config: `nginx -t`
 - Check nginx logs: `tail -f /var/log/nginx/error.log`
 
 ### Build fails on VPS
+
 - Check disk space: `df -h`
 - Check Node version: `node --version` (should be 20.x)
 - Manual build: `cd /home/sirk/sirk && npm run build`
 
 ### Site doesn't update after push
+
 - Check GitHub Actions status
 - SSH into VPS and check git log: `cd /home/sirk/sirk && git log -1`
 - Manual pull: `cd /home/sirk/sirk && git pull origin Main && npm run build`
@@ -299,15 +319,18 @@ Hard refresh (Ctrl+Shift+R) and verify your change is live!
 ## Next Steps (Optional)
 
 ### Add HTTPS (Free with Let's Encrypt)
+
 ```bash
 apt install -y certbot python3-certbot-nginx
 certbot --nginx -d yourdomain.com
 ```
 
 ### Add Database Backups
+
 See `DATABASE_BACKUP_GUIDE.md` (to be created)
 
 ### Monitor with Status Page
+
 Install pm2 or similar for process monitoring
 
 ---
@@ -315,6 +338,7 @@ Install pm2 or similar for process monitoring
 ## Summary
 
 **What you now have:**
+
 - ✅ SIRK deployed to VPS at `http://YOUR_VPS_IP`
 - ✅ Auto-deployment on every push to Main branch
 - ✅ Production-grade nginx serving static files
@@ -322,11 +346,13 @@ Install pm2 or similar for process monitoring
 - ✅ Platform for database backups (future)
 
 **Cost:**
+
 - VPS: $16/month (flat rate, no overages)
 - Domain: $0 (using IP) or ~$12/year (optional)
 - **Total: $16/month vs $20-30/month on Netlify**
 
 **Next experiment instances:**
+
 - Push to Main branch → site updates automatically in 30 seconds
 - No build credits consumed
 - No Netlify limitations
